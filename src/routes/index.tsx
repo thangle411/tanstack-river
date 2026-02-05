@@ -27,12 +27,12 @@ function App() {
         <div className="flex justify-between items-center mb-4">
           <div className="title-small text-neutral-50">Home</div>
           <div className="hidden xl:flex gap-2">
-            <RoundButton variant="primary" onClick={() => { setOpen(true); setTab("buy") }}>
+            <RoundButton variant="primary" onClick={() => { setOpen(true); setTab("one-time-buy") }}>
               <span className="">
                 Buy Bitcoin
               </span>
             </RoundButton>
-            <RoundButton variant="default" onClick={() => { setOpen(true); setTab("sell") }}>
+            <RoundButton variant="default" onClick={() => { setOpen(true); setTab("one-time-sell") }}>
               <span className="">
                 Sell Bitcoin
               </span>

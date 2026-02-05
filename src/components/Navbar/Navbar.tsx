@@ -52,7 +52,7 @@ export default function Navbar() {
 
     return (
         <nav>
-            <img src="/gold-glow.svg" alt="background-img" className="fixed -top-[500px] -left-[600px] z-50 pointer-events-none w-[1210px] h-[980px]" />
+            <img src="/gold-glow.svg" alt="background-img" className="z-101 fixed -top-[500px] -left-[600px] z-50 pointer-events-none w-[1210px] h-[980px]" />
             <div className="xl:flex">
                 <div className="fixed hidden xl:flex flex-col bg-black w-[300px] min-h-screen px-6 py-8 justify-between overflow-y-auto max-h-screen h-dvh min-h-[100dvh] max-h-[100dvh]">
                     <div className="flex flex-col">
@@ -74,7 +74,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex flex-col">
                         <div className="mb-4">
-                            <Button onClick={() => { setOpen(true); setTab("buy") }} type="button"
+                            <Button onClick={() => { setOpen(true); setTab("one-time-buy") }} type="button"
                                 variant="primary" classes="w-full">
                                 Buy bitcoin
                             </Button>

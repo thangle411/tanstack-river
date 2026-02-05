@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react"
 import useBuySellModalStore from "@/stores/buySellModalStore"
-import BuyTab from "./BuyTab"
-import SellTab from "./SellTab"
 import { XIcon } from "lucide-react"
 import AddCashTab from "./AddCashTab"
+import OrderType from "./OrderType"
+import OneTimeBuy from "./OneTimeBuy"
+import TargetBuySell from "./TargetBuySell"
+import OneTimeSell from "./OneTimeSell"
 
 const titles: Record<string, string> = {
-    buy: "Buy Bitcoin",
-    sell: "Sell Bitcoin",
-    "add-cash": "Add Cash"
+    "one-time-buy": "Buy Bitcoin",
+    "one-time-sell": "Sell Bitcoin",
+    "add-cash": "Add Cash",
+    "order-type": "Order Type",
+    "target-buy": "Target Buy",
+    "target-sell": "Target Sell"
 }
 
 export default function BuySellModal() {
@@ -16,11 +21,10 @@ export default function BuySellModal() {
     const tab = useBuySellModalStore((state) => state.tab)
     const setOpen = useBuySellModalStore((state) => state.setOpen)
     const setTab = useBuySellModalStore((state) => state.setTab)
-
     const [isAnimating, setIsAnimating] = useState(false)
     const [shouldRender, setShouldRender] = useState(false)
 
-    const isBuyOrSell = tab === "buy" || tab === "sell"
+    const isBuyOrSell = tab === "one-time-buy" || tab === "one-time-sell" || tab === "target-buy" || tab === "target-sell";
 
     useEffect(() => {
         if (open) {
@@ -42,14 +46,40 @@ export default function BuySellModal() {
         const activeClasses = "text-neutral-50 border-primary-500"
         const inactiveClasses = "text-neutral-300 border-neutral-700"
 
+        const handleBuyClick = () => {
+            if (tab === "one-time-buy" || tab === "target-buy") {
+                return;
+            }
+            if (tab === "target-sell") {
+                setTab("target-buy");
+                return;
+            } else if (tab === "one-time-sell") {
+                setTab("one-time-buy");
+                return;
+            }
+        };
+
+        const handleSellClick = () => {
+            if (tab === "one-time-sell" || tab === "target-sell") {
+                return;
+            }
+            if (tab === "target-buy") {
+                setTab("target-sell");
+                return;
+            } else if (tab === "one-time-buy") {
+                setTab("one-time-sell");
+                return;
+            }
+        };
+
         return (
             <div className="flex justify-center items-center">
-                <button className={`${baseClasses} ${tab === "buy" ? activeClasses : inactiveClasses}`}
-                    onClick={() => setTab("buy")}>
+                <button className={`${baseClasses} ${tab.includes("buy") ? activeClasses : inactiveClasses}`}
+                    onClick={handleBuyClick}>
                     Buy
                 </button>
-                <button className={`${baseClasses} ${tab === "sell" ? activeClasses : inactiveClasses}`}
-                    onClick={() => setTab("sell")}>
+                <button className={`${baseClasses} ${tab.includes("sell") ? activeClasses : inactiveClasses}`}
+                    onClick={handleSellClick}>
                     Sell
                 </button>
             </div>
@@ -81,9 +111,12 @@ export default function BuySellModal() {
                         {isBuyOrSell && renderTabButtons()}
 
                         <div className="">
-                            {tab === "buy" && <BuyTab />}
-                            {tab === "sell" && <SellTab />}
+                            {tab === "one-time-buy" && <OneTimeBuy />}
+                            {tab === "one-time-sell" && <OneTimeSell />}
                             {tab === "add-cash" && <AddCashTab />}
+                            {tab === "order-type" && <OrderType />}
+                            {tab === "target-buy" && <TargetBuySell type="buy" />}
+                            {tab === "target-sell" && <TargetBuySell type="sell" />}
                         </div>
                     </div>
                 </>

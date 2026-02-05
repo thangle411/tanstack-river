@@ -12,6 +12,11 @@ const variants = {
     primary: "gold-gradient-1 text-neutral-950 hover:opacity-90 focus-visible:ring-primary-500",
 }
 
+const disabledVariants = {
+    default: "cursor-not-allowed opacity-50 bg-neutral-850 text-neutral-50",
+    primary: "cursor-not-allowed opacity-50 gold-gradient-1 text-neutral-950",
+}
+
 const borders = {
     default: "rounded-full",
     primary: "rounded-full",
@@ -20,19 +25,22 @@ const borders = {
 
 interface IButtonProps {
     children: React.ReactNode,
-    type?: "button",
+    type?: "button" | "submit",
     onClick?: () => void,
     classes?: string,
     variant?: keyof typeof variants,
     borderRadius?: keyof typeof borders,
+    disabled?: boolean,
 }
 
-export default function Button({ children, classes, variant, borderRadius, onClick, type }: IButtonProps) {
+export default function Button({ children, classes, variant, borderRadius, onClick, type, disabled }: IButtonProps) {
 
-    const variantClasses = variants[variant ?? "default"]
+    const variantClasses = disabled
+        ? disabledVariants[variant ?? "default"]
+        : variants[variant ?? "default"]
     const borderRadiusClasses = borders[borderRadius ?? "default"]
     return (
-        <button type={type} onClick={onClick} className={`${baseClasses} ${variantClasses} ${borderRadiusClasses} ${classes ?? ''}`}>
+        <button type={type} onClick={onClick} disabled={disabled} className={`${baseClasses} ${variantClasses} ${borderRadiusClasses} ${classes ?? ''}`}>
             {children}
         </button>
     )
