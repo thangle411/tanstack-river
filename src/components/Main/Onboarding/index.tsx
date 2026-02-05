@@ -1,9 +1,12 @@
 import { BitcoinIcon, ChevronRight, CircleCheck } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { userQueryOptions } from "@/hooks/query-options";
+import useBuySellModalStore from "@/stores/buySellModalStore";
 
 export default function Onboarding() {
     const { data: user } = useSuspenseQuery(userQueryOptions())
+    const setOpen = useBuySellModalStore((state) => state.setOpen)
+    const setTab = useBuySellModalStore((state) => state.setTab)
 
     return (
         <div>
@@ -64,7 +67,7 @@ export default function Onboarding() {
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" className="p-1 flex w-full flex w-full items-center gap-4 group rounded-xl text-left overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-700 focus-visible:ring-offset-neutral-950" phx-click="open_buy_sell_modal" phx-target="#buy-sell-modal">
+                            <button onClick={() => { setOpen(true); setTab("buy") }} type="button" className="p-1 flex w-full flex w-full items-center gap-4 group rounded-xl text-left overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-700 focus-visible:ring-offset-neutral-950" phx-click="open_buy_sell_modal" phx-target="#buy-sell-modal">
                                 <div className="p-3 flex w-full items-center gap-4 rounded-lg group-hover:bg-neutral-800">
                                     <div>
                                         <BitcoinIcon />

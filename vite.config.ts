@@ -6,6 +6,7 @@ import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import { fileURLToPath, URL } from 'url'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react';
 
 const config = defineConfig({
   resolve: {
@@ -14,6 +15,11 @@ const config = defineConfig({
     },
   },
   plugins: [
+    viteReact({
+      babel: {
+        plugins: ['babel-plugin-react-compiler'],
+      },
+    }),
     tanstackRouter(),
     devtools(),
     // this is the plugin that enables path aliases
@@ -21,12 +27,6 @@ const config = defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    viteReact(),
-    babel({
-      babelConfig: {
-        plugins: ['babel-plugin-react-compiler'],
-      },
-    }),
   ],
 })
 
