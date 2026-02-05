@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Chart from "./Chart";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from "@/hooks/query-options";
-import useBinanceWebSocket from "@/hooks/useBinanceWebSocket";
 import { formatPrice } from "./utils";
 import useWebSocketPriceStore from "@/stores/websocketPriceStore";
 
@@ -53,7 +52,7 @@ export default function BitcoinChart() {
     const [price, setPrice] = useState<number>(chartData?.prices[chartData?.prices.length - 1][1] || 0);
 
     const bitcoinData = chartData?.prices.map(([timestamp, price]: [number, number]) => ({
-        timestamp,
+        timestamp: new Date(timestamp),
         price
     })) || [];
 
@@ -68,7 +67,7 @@ export default function BitcoinChart() {
 
     return (
         <div className="bg-neutral-900 rounded-2xl relative max-h-[400px]">
-            <div className="pt-6 pl-6">
+            <div className="pt-6 pl-6 mb-5">
                 <div className="body-small text-neutral-300">
                     Bitcoin price
                 </div>
@@ -85,7 +84,7 @@ export default function BitcoinChart() {
             </div>
 
             <Chart
-                chartData={bitcoinData}
+                data={bitcoinData}
                 setIsChartHovered={setIsChartHovered}
                 setPrice={setPrice}
             />

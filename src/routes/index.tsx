@@ -8,6 +8,7 @@ import BitcoinChart, { BitcoinChartSuspense } from '@/components/Main/BitcoinCha
 import { Suspense } from 'react'
 import Onboarding from '@/components/Main/Onboarding'
 import useBuySellModalStore from '@/stores/buySellModalStore'
+import BitcoinInterest from '@/components/Main/BitcoinInterest'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -111,9 +112,7 @@ function App() {
                 </div>
               </Container>
             </div>
-            <Container>
-              bitcoin interest on cash
-            </Container>
+            <BitcoinInterest />
           </div>
           <Onboarding />
         </div>

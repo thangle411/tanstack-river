@@ -8,7 +8,7 @@ export const userQueryOptions = () => (
         queryKey: [USER_QUERY_KEY],
         queryFn: getUser,
         staleTime: 1000 * 60 * 1,
-        gcTime: 1000 * 60 * 10,
+        refetchInterval: 1000 * 60 * 1,
     })
 )
 
@@ -17,7 +17,6 @@ export const coingeckoBitcoinMarketChartQueryOptions = () => (
         queryKey: [BITCOIN_MARKET_CHART_QUERY_KEY],
         queryFn: getBitcoinMarketData,
         staleTime: 1000 * 60 * 1,
-        gcTime: 1000 * 60 * 10,
     })
 )
 
@@ -26,7 +25,6 @@ export const coingeckoBitcoinMarketPriceQueryOptions = () => (
         queryKey: [BITCOIN_MARKET_PRICE_QUERY_KEY],
         queryFn: getBitcoinPrice,
         staleTime: 1000 * 60 * 1,
-        gcTime: 1000 * 60 * 10,
     })
 )
 
