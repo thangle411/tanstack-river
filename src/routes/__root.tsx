@@ -37,22 +37,20 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <UserProvider user={user}>
-        <Navbar />
-        <Outlet />
-        <BuySellModal />
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-      </UserProvider>
+      <Navbar />
+      <Outlet />
+      <BuySellModal />
+      <TanStackDevtools
+        config={{
+          position: 'bottom-right',
+        }}
+        plugins={[
+          {
+            name: 'Tanstack Router',
+            render: <TanStackRouterDevtoolsPanel />,
+          },
+        ]}
+      />
     </QueryClientProvider>
   )
 }

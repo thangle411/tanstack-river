@@ -7,7 +7,7 @@ import { ChevronRight } from 'lucide-react'
 import BitcoinChart, { BitcoinChartSuspense } from '@/components/Main/BitcoinChart'
 import { Suspense } from 'react'
 import Onboarding from '@/components/Main/Onboarding'
-import useBuySellModalStore from '@/store'
+import useBuySellModalStore from '@/stores/buySellModalStore'
 
 export const Route = createFileRoute('/')({
   component: App,

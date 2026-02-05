@@ -1,8 +1,9 @@
-import { useUser } from "@/providers";
 import { BitcoinIcon, ChevronRight, CircleCheck } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { userQueryOptions } from "@/hooks/query-options";
 
 export default function Onboarding() {
-    const { user } = useUser();
+    const { data: user } = useSuspenseQuery(userQueryOptions())
 
     return (
         <div>
@@ -15,7 +16,7 @@ export default function Onboarding() {
                     <div className="px-6 pb-3 flex-col space-y-6">
                         <div>
                             <div className="body-medium-plus mb-1">
-                                Welcome {user.name},
+                                Welcome {user?.name},
                             </div>
                             <p className="text-neutral-300 body-small">
                                 You're almost done setting up your account

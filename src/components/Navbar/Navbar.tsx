@@ -1,7 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home, ChartNoAxesCombined, FileText, Clock, Headphones, Settings, Box, ChevronRight } from "lucide-react";
 import NavbarItem from "./NavbarItem";
-import useBuySellModalStore from "@/store";
+import useBuySellModalStore from "@/stores/buySellModalStore";
 import Button from "../Buttons/Button";
 
 const topSection = [
@@ -48,6 +48,7 @@ const bottomSection = [
 export default function Navbar() {
     const location = useLocation();
     const setOpen = useBuySellModalStore((state) => state.setOpen)
+    const setTab = useBuySellModalStore((state) => state.setTab)
 
     return (
         <nav>
@@ -73,7 +74,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex flex-col">
                         <div className="mb-4">
-                            <Button onClick={() => setOpen(true)} type="button"
+                            <Button onClick={() => { setOpen(true); setTab("buy") }} type="button"
                                 variant="primary" classes="w-full">
                                 Buy bitcoin
                             </Button>

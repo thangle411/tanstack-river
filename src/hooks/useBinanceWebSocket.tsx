@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
+
 export default function useBinanceWebSocket() {
     const [price, setPrice] = useState<number>(0);
     const latestPriceRef = useRef<number>(0);

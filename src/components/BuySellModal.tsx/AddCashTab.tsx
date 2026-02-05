@@ -1,11 +1,12 @@
-import { useUser } from "@/providers";
 import { Copy, RefreshCcw } from "lucide-react";
 import Button from "../Buttons/Button";
-import useBuySellModalStore from "@/store";
+import useBuySellModalStore from "@/stores/buySellModalStore";
 import { useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { userQueryOptions } from "@/hooks/query-options";
 
 export default function AddCashTab() {
-    const { user } = useUser();
+    const { data: user } = useSuspenseQuery(userQueryOptions())
     const setOpen = useBuySellModalStore((state) => state.setOpen);
     const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
@@ -36,15 +37,15 @@ export default function AddCashTab() {
         },
         {
             label: "Recipient name",
-            value: user.name
+            value: user?.name
         },
         {
             label: "Your account number",
-            value: user.phone
+            value: user?.phone
         },
         {
             label: "Receipient address",
-            value: `${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}`
+            value: `${user?.address.street}, ${user?.address.suite}, ${user?.address.city}, ${user?.address.zipcode}`
         }
     ];
 
@@ -61,7 +62,7 @@ export default function AddCashTab() {
                 {wireInstructions.map((instruction, index) => (
                     <div
                         key={index}
-                        onClick={() => handleCopy(instruction.value, index)}
+                        onClick={() => handleCopy(instruction.value ?? '', index)}
                         className="items-center flex justify-between cursor-pointer text-base font-light border-solid border border-neutral-700 first:rounded-t last:rounded-b px-4 py-3 text-neutral-50 bg-neutral-800 hover:bg-neutral-700 [&amp;:hover_.copy-icon]:text-neutral-50 gap-y-4"
                     >
                         <div className="flex flex-col gap-y-1">

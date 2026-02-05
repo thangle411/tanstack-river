@@ -1,5 +1,5 @@
 import { BanknoteArrowDownIcon, ChevronRightIcon, LandmarkIcon, RefreshCcw } from "lucide-react";
-import useBuySellModalStore from "@/store";
+import useBuySellModalStore from "@/stores/buySellModalStore";
 
 export default function BuyTab() {
     const setTab = useBuySellModalStore((state) => state.setTab)
