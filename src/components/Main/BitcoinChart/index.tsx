@@ -4,6 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from "@/hooks/query-options";
 import useBinanceWebSocket from "@/hooks/useBinanceWebSocket";
 import { formatPrice } from "./utils";
+import useWebSocketPriceStore from "@/stores/websocketPriceStore";
 
 export const BitcoinChartSuspense = () => (
     <div className="bg-neutral-900 rounded-2xl relative max-h-[400px]">
@@ -47,8 +48,7 @@ export const BitcoinChartSuspense = () => (
 export default function BitcoinChart() {
     const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions());
     const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceQueryOptions());
-    const websocketPrice = useBinanceWebSocket();
-
+    const websocketPrice = useWebSocketPriceStore((state) => state.price);
     const [isChartHovered, setIsChartHovered] = useState(false);
     const [price, setPrice] = useState<number>(chartData?.prices[chartData?.prices.length - 1][1] || 0);
 
@@ -58,24 +58,13 @@ export default function BitcoinChart() {
     })) || [];
 
     useEffect(() => {
-        if (websocketPrice.price === 0) {
+        if (isChartHovered) return;
+        if (websocketPrice === 0) {
             setPrice(bitcoinData[bitcoinData.length - 1].price)
         } else {
-            setPrice(websocketPrice.price)
+            setPrice(websocketPrice)
         }
-    }, []);
-
-    useEffect(() => {
-        if (!isChartHovered) {
-            if (bitcoinData.length === 0) return;
-            if (websocketPrice.price === 0) {
-                setPrice(bitcoinData[bitcoinData.length - 1].price)
-            } else {
-                setPrice(websocketPrice.price)
-            }
-        } else {
-        }
-    }, [isChartHovered]);
+    }, [websocketPrice, isChartHovered]);
 
     return (
         <div className="bg-neutral-900 rounded-2xl relative max-h-[400px]">

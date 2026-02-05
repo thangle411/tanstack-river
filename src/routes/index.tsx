@@ -41,11 +41,9 @@ function App() {
         </div>
         <div className="flex flex-col xl:flex-row gap-4 mt-3">
           <div className="xl:flex flex-col flex-grow space-y-4">
-            <div>
-              <Suspense fallback={<BitcoinChartSuspense />}>
-                <BitcoinChart />
-              </Suspense>
-            </div>
+            <Suspense fallback={<BitcoinChartSuspense />}>
+              <BitcoinChart />
+            </Suspense>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <Container>
                 <button type="button" className="cursor-pointer block rounded-md duration-150 ease-linear transition-all text-center justify-center text-base tracking-normal leading-6 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-primary-500 hover:text-primary-400 active:text-primary-400 outline-none font-light mt-0" >

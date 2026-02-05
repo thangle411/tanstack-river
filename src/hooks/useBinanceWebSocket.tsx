@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
+import useWebSocketPriceStore from "@/stores/websocketPriceStore";
 
 
 export default function useBinanceWebSocket() {
-    const [price, setPrice] = useState<number>(0);
+    const setPrice = useWebSocketPriceStore((state) => state.setPrice);
     const latestPriceRef = useRef<number>(0);
 
     useEffect(() => {
@@ -30,7 +31,7 @@ export default function useBinanceWebSocket() {
             if (latestPriceRef.current > 0) {
                 setPrice(latestPriceRef.current);
             }
-        }, 5000);
+        }, 3000);
 
         return () => {
             clearInterval(intervalId);
@@ -39,6 +40,4 @@ export default function useBinanceWebSocket() {
             }
         };
     }, []);
-
-    return { price };
 }

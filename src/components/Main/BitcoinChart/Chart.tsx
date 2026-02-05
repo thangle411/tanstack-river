@@ -36,15 +36,15 @@ interface IChartProps {
 
 export default function Chart({ chartData, setIsChartHovered, setPrice }: IChartProps) {
 
-    const handleMouseMove = useCallback(() => {
+    const handleMouseMove = () => {
         setIsChartHovered(true);
-    }, []);
+    }
 
-    const handleMouseLeave = useCallback(() => {
+    const handleMouseLeave = () => {
         setIsChartHovered(false);
-    }, []);
+    }
 
-    const CustomTooltip = useCallback(({ active, payload, coordinate }: any) => {
+    const CustomTooltip = ({ active, payload, coordinate }: any) => {
         if (active && payload && payload.length && coordinate) {
             const dataPoint = payload[0].payload;
             const timestamp = dataPoint.timestamp;
@@ -75,7 +75,7 @@ export default function Chart({ chartData, setIsChartHovered, setPrice }: IChart
             );
         }
         return null;
-    }, []);
+    }
 
     return (
         <AreaChart
