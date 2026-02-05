@@ -13,7 +13,7 @@ export default function useBinanceWebSocket() {
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log('websocket message', data);
+            // console.log('websocket message', data);
             latestPriceRef.current = parseFloat(data.p);
         };
 

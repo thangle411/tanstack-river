@@ -1,5 +1,5 @@
 import { useUser } from "@/providers";
-import { BitcoinIcon, CheckCircle } from "lucide-react";
+import { BitcoinIcon, ChevronRight, CircleCheck } from "lucide-react";
 
 export default function Onboarding() {
     const { user } = useUser();
@@ -34,7 +34,7 @@ export default function Onboarding() {
                             <div className="p-1 flex w-full flex w-full items-center gap-4 rounded-xl text-left overflow-hidden">
                                 <div className="p-3 flex w-full items-center gap-4 rounded-lg">
                                     <div>
-                                        <CheckCircle className="text-teal-300" />
+                                        <CircleCheck className="text-teal-300" />
                                     </div>
                                     <div className="space-y-0 grow">
                                         <div className="inline-flex items-center gap-2">
@@ -50,7 +50,7 @@ export default function Onboarding() {
                             <div className="p-1 flex w-full flex w-full items-center gap-4 rounded-xl text-left overflow-hidden">
                                 <div className="p-3 flex w-full items-center gap-4 rounded-lg">
                                     <div>
-                                        <CheckCircle className="text-teal-300" />
+                                        <CircleCheck className="text-teal-300" />
                                     </div>
                                     <div className="space-y-0 grow">
                                         <div className="inline-flex items-center gap-2">
@@ -79,6 +79,7 @@ export default function Onboarding() {
                                         </div>
                                     </div>
                                     <div>
+                                        <ChevronRight className="text-neutral-500 h-5 w-5" />
                                     </div>
                                 </div>
                             </button>

@@ -8,6 +8,8 @@ import { UserProvider } from '@/providers'
 import { userQueryOptions } from '@/hooks/query-options'
 import NotFound from '@/components/404'
 import Error from '@/components/Error'
+import Modal from '@/components/Modal'
+import BuySellModal from '@/components/BuySellModal.tsx'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -38,6 +40,7 @@ function RootComponent() {
       <UserProvider user={user}>
         <Navbar />
         <Outlet />
+        <BuySellModal />
         <TanStackDevtools
           config={{
             position: 'bottom-right',

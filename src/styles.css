@@ -2,16 +2,10 @@
 
 @theme {
   --color-neutral-850: #262626;
-  --color-neutral-800: #2e2e2e;
+  --color-neutral-800: rgb(38 38 38);
   --color-neutral-300: #9a9a9a;
-}
-
-.bg-neutral-700 {
-  background-color: rgb(57 57 57 / 1);
-}
-
-.bg-primary-500 {
-  background-color: rgb(197 160 99 / 1);
+  --color-primary-500: rgb(197 160 99);
+  --color-neutral-700: rgb(57 57 57);
 }
 
 svg {
@@ -53,10 +47,10 @@ body {
 }
 
 .body-small {
-  /* font-family: Inter, system-ui, sans-serif;
+  font-family: Inter, system-ui, sans-serif;
   font-size: .875rem;
   font-weight: 300;
-  line-height: 1.5rem; */
+  line-height: 1.5rem;
 }
 
 .body-medium-plus {

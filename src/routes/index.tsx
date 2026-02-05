@@ -2,11 +2,12 @@ import MainLayout from '@/components/MainLayout'
 import { createFileRoute } from '@tanstack/react-router'
 import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from '@/hooks/query-options'
 import Container from '@/components/SharedContainer'
-import RoundButton from '@/components/Buttons/RoundButton'
+import RoundButton from '@/components/Buttons/Button'
 import { ChevronRight } from 'lucide-react'
 import BitcoinChart, { BitcoinChartSuspense } from '@/components/Main/BitcoinChart'
 import { Suspense } from 'react'
 import Onboarding from '@/components/Main/Onboarding'
+import useBuySellModalStore from '@/store'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -17,38 +18,25 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
+  const setOpen = useBuySellModalStore((state) => state.setOpen);
+  const setTab = useBuySellModalStore((state) => state.setTab);
+
   return (
     <MainLayout>
       <div className="flex flex-col w-full">
         <div className="flex justify-between items-center mb-4">
           <div className="title-small text-neutral-50">Home</div>
           <div className="hidden xl:flex gap-2">
-            <button type="button" className="relative rounded-full text-center whitespace-nowrap outline-none active:scale-97 gold-gradient-1 text-neutral-950 hover:opacity-90 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 active:ring-0 active:opacity-60 body-small-plus px-6 py-2">
-              <span className="hidden z-0 absolute inset-0 h-full w-full items-center justify-center">
-                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-50" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4">
-                  </circle>
-                  <path className="text-primary-500 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                  </path>
-                </svg>
-              </span>
+            <RoundButton variant="primary" onClick={() => { setOpen(true); setTab("buy") }}>
               <span className="">
                 Buy Bitcoin
               </span>
-            </button>
-            <button type="button" className="relative rounded-full text-center whitespace-nowrap outline-none active:scale-97 bg-neutral-850 text-neutral-50 hover:bg-neutral-800 hover:text-neutral-50 focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-800 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 focus-visible:bg-neutral-850 active:ring-0 active:opacity-60 ancestor-js-modal:bg-neutral-800 ancestor-js-modal:hover:bg-neutral-700 ancestor-js-modal:focus-visible:bg-neutral-800 ancestor-js-modal:focus-visible:ring-neutral-800 body-small-plus px-6 py-2">
-              <span className="hidden z-0 absolute inset-0 h-full w-full items-center justify-center">
-                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-50" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4">
-                  </circle>
-                  <path className="text-primary-500 opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                  </path>
-                </svg>
-              </span>
+            </RoundButton>
+            <RoundButton variant="default" onClick={() => { setOpen(true); setTab("sell") }}>
               <span className="">
                 Sell Bitcoin
               </span>
-            </button>
+            </RoundButton>
           </div>
         </div>
         <div className="flex flex-col xl:flex-row gap-4 mt-3">
