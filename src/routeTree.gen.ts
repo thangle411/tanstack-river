@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as PerformanceRouteImport } from './routes/performance'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as EarnRewardsRouteImport } from './routes/earn-rewards'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as AccountRouteImport } from './routes/account'
@@ -30,6 +31,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const PerformanceRoute = PerformanceRouteImport.update({
   id: '/performance',
   path: '/performance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EarnRewardsRoute = EarnRewardsRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/documents': typeof DocumentsRoute
   '/earn-rewards': typeof EarnRewardsRoute
+  '/login': typeof LoginRoute
   '/performance': typeof PerformanceRoute
   '/settings': typeof SettingsRoute
   '/support': typeof SupportRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/documents': typeof DocumentsRoute
   '/earn-rewards': typeof EarnRewardsRoute
+  '/login': typeof LoginRoute
   '/performance': typeof PerformanceRoute
   '/settings': typeof SettingsRoute
   '/support': typeof SupportRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/documents': typeof DocumentsRoute
   '/earn-rewards': typeof EarnRewardsRoute
+  '/login': typeof LoginRoute
   '/performance': typeof PerformanceRoute
   '/settings': typeof SettingsRoute
   '/support': typeof SupportRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/documents'
     | '/earn-rewards'
+    | '/login'
     | '/performance'
     | '/settings'
     | '/support'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/documents'
     | '/earn-rewards'
+    | '/login'
     | '/performance'
     | '/settings'
     | '/support'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/documents'
     | '/earn-rewards'
+    | '/login'
     | '/performance'
     | '/settings'
     | '/support'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   DocumentsRoute: typeof DocumentsRoute
   EarnRewardsRoute: typeof EarnRewardsRoute
+  LoginRoute: typeof LoginRoute
   PerformanceRoute: typeof PerformanceRoute
   SettingsRoute: typeof SettingsRoute
   SupportRoute: typeof SupportRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/performance'
       fullPath: '/performance'
       preLoaderRoute: typeof PerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/earn-rewards': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   DocumentsRoute: DocumentsRoute,
   EarnRewardsRoute: EarnRewardsRoute,
+  LoginRoute: LoginRoute,
   PerformanceRoute: PerformanceRoute,
   SettingsRoute: SettingsRoute,
   SupportRoute: SupportRoute,
@@ -187,12 +208,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

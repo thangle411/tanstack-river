@@ -6,6 +6,18 @@
   --color-neutral-300: #9a9a9a;
 }
 
+.bg-neutral-700 {
+  background-color: rgb(57 57 57 / 1);
+}
+
+.bg-primary-500 {
+  background-color: rgb(197 160 99 / 1);
+}
+
+svg {
+  user-select: none;
+}
+
 *,
 *::before,
 *::after {
@@ -18,7 +30,8 @@ body {
   min-height: 100vh;
   flex-direction: column;
   display: flex;
-  background: black
+  background: black;
+  color: #f9f9f9;
 }
 
 .gold-gradient-1 {
@@ -44,6 +57,13 @@ body {
   font-size: .875rem;
   font-weight: 300;
   line-height: 1.5rem; */
+}
+
+.body-medium-plus {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 2rem;
 }
 
 .body-large-plus {

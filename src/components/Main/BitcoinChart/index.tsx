@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Chart from "./Chart";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { coingeckoBitcoinMarketChartOptions, coingeckoBitcoinMarketPriceOptions } from "@/hooks/query-options";
+import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from "@/hooks/query-options";
 import useBinanceWebSocket from "@/hooks/useBinanceWebSocket";
 import { formatPrice } from "./utils";
 
@@ -45,8 +45,8 @@ export const BitcoinChartSuspense = () => (
 
 
 export default function BitcoinChart() {
-    const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartOptions());
-    const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceOptions());
+    const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions());
+    const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceQueryOptions());
     const websocketPrice = useBinanceWebSocket();
 
     const [isChartHovered, setIsChartHovered] = useState(false);
@@ -69,10 +69,8 @@ export default function BitcoinChart() {
         if (!isChartHovered) {
             if (bitcoinData.length === 0) return;
             if (websocketPrice.price === 0) {
-                console.log('bitcoinData', bitcoinData);
                 setPrice(bitcoinData[bitcoinData.length - 1].price)
             } else {
-                console.log('websocketPrice.price', websocketPrice.price);
                 setPrice(websocketPrice.price)
             }
         } else {

@@ -20,6 +20,10 @@ const CustomCursor = ({ points, height }: any) => {
             stroke="#d4b5834b"
             strokeWidth={2}
             strokeDasharray="10 5"
+            style={{
+                userSelect: 'none',
+                pointerEvents: 'none'
+            }}
         />
     );
 };
@@ -75,7 +79,7 @@ export default function Chart({ chartData, setIsChartHovered, setPrice }: IChart
 
     return (
         <AreaChart
-            style={{ width: '100%', maxHeight: '260px', aspectRatio: 1.618 }}
+            style={{ width: '100%', maxHeight: '260px', aspectRatio: 1.618, userSelect: 'none' }}
             responsive
             data={chartData}
             margin={{

@@ -1,17 +1,18 @@
 import MainLayout from '@/components/MainLayout'
 import { createFileRoute } from '@tanstack/react-router'
-import { coingeckoBitcoinMarketChartOptions, coingeckoBitcoinMarketPriceOptions } from '@/hooks/query-options'
-import Container from '@/components/Container'
+import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from '@/hooks/query-options'
+import Container from '@/components/SharedContainer'
 import RoundButton from '@/components/Buttons/RoundButton'
 import { ChevronRight } from 'lucide-react'
-import BitcoinChart, { BitcoinChartSuspense } from '@/components/BitcoinChart/BitcoinChart'
+import BitcoinChart, { BitcoinChartSuspense } from '@/components/Main/BitcoinChart'
 import { Suspense } from 'react'
+import Onboarding from '@/components/Main/Onboarding'
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
-    context.queryClient.ensureQueryData(coingeckoBitcoinMarketChartOptions())
-    context.queryClient.ensureQueryData(coingeckoBitcoinMarketPriceOptions())
+    context.queryClient.ensureQueryData(coingeckoBitcoinMarketChartQueryOptions())
+    context.queryClient.ensureQueryData(coingeckoBitcoinMarketPriceQueryOptions())
   }
 })
 
@@ -57,9 +58,6 @@ function App() {
                 <BitcoinChart />
               </Suspense>
             </div>
-            {/* <Container>
-              tax notification
-            </Container> */}
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <Container>
                 <button type="button" className="cursor-pointer block rounded-md duration-150 ease-linear transition-all text-center justify-center text-base tracking-normal leading-6 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed text-primary-500 hover:text-primary-400 active:text-primary-400 outline-none font-light mt-0" >
@@ -131,14 +129,7 @@ function App() {
               bitcoin interest on cash
             </Container>
           </div>
-          <div className="space-y-4 xl:max-w-[368px]">
-            <div className="space-y-2 flex flex-col">
-              carousel
-            </div>
-            <div className="bg-neutral-900 rounded-2xl flex flex-col space-y-6">
-              <img src="/river-vertical-stripes-theme.svg" className="w-full h-full" />
-            </div>
-          </div>
+          <Onboarding />
         </div>
       </div>
     </MainLayout >
