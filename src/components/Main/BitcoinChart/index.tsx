@@ -4,6 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from "@/hooks/query-options";
 import { formatPrice } from "./utils";
 import useWebSocketPriceStore from "@/stores/websocketPriceStore";
+import Filters, { TFilter } from "./Filters";
 
 export const BitcoinChartSuspense = () => (
     <div className="bg-neutral-900 rounded-2xl relative max-h-[400px]">
@@ -23,7 +24,7 @@ export const BitcoinChartSuspense = () => (
         <div
             className="w-full animate-pulse bg-neutral-800/30 rounded-lg"
             style={{
-                maxHeight: '260px',
+                maxHeight: '180px',
                 aspectRatio: 1.618,
                 background: 'linear-gradient(90deg, rgba(38, 38, 38, 0.3) 0%, rgba(64, 64, 64, 0.5) 50%, rgba(38, 38, 38, 0.3) 100%)',
                 backgroundSize: '200% 100%',
@@ -31,13 +32,12 @@ export const BitcoinChartSuspense = () => (
             }}
         >
         </div>
-        <div className="w-full px-12 lg:px-40 xl:px-24 2xl:px-40 pb-4 text-xs">
+        <div className="w-full px-12 lg:px-40 xl:px-24 2xl:px-40 pb-4 text-xs mt-2">
             <div className="flex justify-between">
                 <button className="text-neutral-300 body-mini">24H</button>
                 <button className="text-neutral-300 body-mini">1W</button>
                 <button className="text-neutral-300 body-mini">1M</button>
                 <button className="text-neutral-300 body-mini">1Y</button>
-                <button className="text-neutral-300 body-mini">ALL</button>
             </div>
         </div>
     </div>
@@ -45,11 +45,17 @@ export const BitcoinChartSuspense = () => (
 
 
 export default function BitcoinChart() {
-    const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions());
+    const [isChartHovered, setIsChartHovered] = useState(false);
+    const [filter, setFilter] = useState<TFilter>('1');
+
+    const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions(Number(filter)));
     const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceQueryOptions());
     const websocketPrice = useWebSocketPriceStore((state) => state.price);
-    const [isChartHovered, setIsChartHovered] = useState(false);
     const [price, setPrice] = useState<number>(chartData?.prices[chartData?.prices.length - 1][1] || 0);
+
+    useEffect(() => {
+        console.log(filter);
+    }, [filter]);
 
     const bitcoinData = chartData?.prices.map(([timestamp, price]: [number, number]) => ({
         timestamp: new Date(timestamp),
@@ -89,16 +95,7 @@ export default function BitcoinChart() {
                 setPrice={setPrice}
             />
 
-
-            <div className="w-full px-12 lg:px-40 xl:px-24 2xl:px-40 pb-4 text-xs">
-                <div className="flex justify-between">
-                    <button className="text-neutral-300 body-mini">24H</button>
-                    <button className="text-neutral-300 body-mini">1W</button>
-                    <button className="text-neutral-300 body-mini">1M</button>
-                    <button className="text-neutral-300 body-mini">1Y</button>
-                    <button className="text-neutral-300 body-mini">ALL</button>
-                </div>
-            </div>
+            <Filters value={filter} setFilter={setFilter} />
         </div>
 
     );

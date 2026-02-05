@@ -12,10 +12,10 @@ export const userQueryOptions = () => (
     })
 )
 
-export const coingeckoBitcoinMarketChartQueryOptions = () => (
+export const coingeckoBitcoinMarketChartQueryOptions = (filter: number = 1) => (
     queryOptions({
-        queryKey: [BITCOIN_MARKET_CHART_QUERY_KEY],
-        queryFn: getBitcoinMarketData,
+        queryKey: [BITCOIN_MARKET_CHART_QUERY_KEY, filter],
+        queryFn: () => getBitcoinMarketData(filter),
         staleTime: 1000 * 60 * 1,
     })
 )

@@ -96,9 +96,9 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
             lineEl = document.createElement('div');
             lineEl.className = 'tooltip-line';
             lineEl.style.position = 'absolute';
-            lineEl.style.bottom = '0';
+            lineEl.style.bottom = '30px';
             lineEl.style.width = '0';
-            lineEl.style.height = '240px';
+            lineEl.style.height = '170px';
             const dashLength = 8;
             const gapLength = 12;
             const svgPattern = `data:image/svg+xml,%3Csvg width='3' height='${dashLength + gapLength}' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='1.5' y1='0' x2='1.5' y2='${dashLength}' stroke='%23e2bd7980' stroke-width='2'/%3E%3C/svg%3E`;
@@ -205,7 +205,7 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
 
 
     return (
-        <div style={{ height: '250px', width: '100%' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div style={{ height: '180px', width: '100%' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <Line
                 ref={chartRef}
                 key={`chart-${data.length}`}
