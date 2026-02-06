@@ -3,6 +3,7 @@ import Button from "../Buttons/Button";
 import Input from "./Input";
 import { useEffect, useState } from "react";
 import { handleAmountChange } from "./utils/handleAmountChange";
+import { Odometer } from "../Odometer";
 
 const PERCENTAGES = [2, 5, 10];
 
@@ -11,15 +12,21 @@ export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
     const [amount, setAmount] = useState("");
     const [transactionAmount, setTransactionAmount] = useState(0);
     const [percent, setPercent] = useState(0);
+    const [chosenPercent, setChosenPercent] = useState(0);
 
     const handlePercentSelect = (percent: number) => {
-        setPercent(percent);
+        setChosenPercent(percent);
         if (type === "sell") {
             handleAmountChange((websocketPrice + ((percent / 100 * websocketPrice))).toFixed(2), setAmount)
         } else {
             handleAmountChange((websocketPrice - ((percent / 100 * websocketPrice))).toFixed(2), setAmount)
         }
     }
+
+    useEffect(() => {
+        if (chosenPercent === 0) return;
+        setAmount((websocketPrice + ((chosenPercent / 100 * websocketPrice))).toFixed(2));
+    }, [chosenPercent, websocketPrice])
 
     useEffect(() => {
         if (!amount) {
@@ -32,6 +39,7 @@ export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
     }, [amount, websocketPrice])
 
     const handleAmountChangeLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setChosenPercent(0);
         handleAmountChange(e.target.value, setAmount)
     }
 
@@ -42,12 +50,21 @@ export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
                     <h2 className="body-large-plus text-white">
                         Target {type} price
                     </h2>
-                    <p className="mt-2">
-                        <span>Current price:</span> <span className="text-primary-500">${websocketPrice.toLocaleString()}</span>
+                    <p className="mt-2 mb-4">
+                        <span className="text-neutral-500">Current price:</span>
+                        <span className="text-primary-500">
+                            &nbsp; $<Odometer value={websocketPrice} duration={250} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+                        </span>
                     </p>
                     <Input amount={amount} handleAmountChange={handleAmountChangeLocal} />
                     {transactionAmount > 0 && (
-                        <div className="text-neutral-500 mt-4">{percent > 0 && "+"}{percent.toFixed(2)}% from current price</div>
+                        <div className="text-neutral-500 mt-4">
+                            {chosenPercent ?
+                                <span>{chosenPercent}% from current price</span>
+                                :
+                                <span>{percent > 0 && "+"}{percent.toFixed(2)}% from current price</span>
+                            }
+                        </div>
                     )}
                     <div className="grid grid-cols-3 gap-2 w-full mt-6">
                         {PERCENTAGES.map((percent) => (
