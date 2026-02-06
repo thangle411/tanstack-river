@@ -1,5 +1,3 @@
-// import { AreaChart, Area, YAxis, Tooltip, XAxis } from 'recharts';
-import { formatPrice } from './utils';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -47,6 +45,7 @@ interface IChartProps {
 
 export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps) {
     const chartRef = useRef<ChartJS<"line">>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
     const [chartData, setChartData] = useState<ChartData<'line'>>({
         datasets: [],
     });
@@ -57,6 +56,73 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
 
     const handleMouseLeave = () => {
         setIsChartHovered(false);
+
+        // hide tooltip when leaving the wrapper
+        const chart = chartRef.current;
+        if (!chart) return;
+
+        // @ts-expect-error
+        const tooltipEl = chart.canvas.parentNode.querySelector('.custom-tooltip');
+        // @ts-expect-error
+        const lineEl = chart.canvas.parentNode.querySelector('.tooltip-line');
+        // @ts-expect-error
+        if (tooltipEl) tooltipEl.style.opacity = 0;
+        // @ts-expect-error
+        if (lineEl) lineEl.style.opacity = 0;
+    };
+
+    const handleWrapperMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        console.log(e, chartRef.current, wrapperRef.current);
+        const chart = chartRef.current;
+        const wrapper = wrapperRef.current;
+        if (!chart || !wrapper) return;
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const canvasRect = chart.canvas.getBoundingClientRect();
+        const relativeX = e.clientX - wrapperRect.left;
+        const percentage = relativeX / wrapperRect.width;
+
+        const dataIndex = Math.floor(percentage * data.length);
+        const clampedIndex = Math.max(0, Math.min(dataIndex, data.length - 1));
+        const dataPoint = data[clampedIndex];
+
+        setPrice(dataPoint.price);
+
+        const tooltipEl = getOrCreateTooltip(chart);
+        const lineEl = getOrCreateVerticalLine(chart);
+
+        const spanEl = tooltipEl.querySelector('span');
+        if (spanEl) {
+            const date = new Date(dataPoint.timestamp);
+            const formattedDate = date.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace(',', '');
+            spanEl.textContent = formattedDate;
+        }
+
+        tooltipEl.style.opacity = 1;
+        const tooltipWidth = tooltipEl.offsetWidth;
+        const chartWidth = chart.width;
+
+        const canvasX = relativeX - (canvasRect.left - wrapperRect.left);
+
+        let leftPosition = canvasRect.left - wrapperRect.left + canvasX - (tooltipWidth / 2);
+
+        if (canvasX - (tooltipWidth / 2) < 0) {
+            leftPosition = canvasRect.left - wrapperRect.left;
+        } else if (canvasX + (tooltipWidth / 2) > chartWidth) {
+            leftPosition = canvasRect.left - wrapperRect.left + chartWidth - tooltipWidth;
+        }
+
+        tooltipEl.style.left = leftPosition + 'px';
+        tooltipEl.style.top = '140px';
+
+        lineEl.style.opacity = 1;
+        lineEl.style.left = (canvasRect.left - wrapperRect.left + canvasX) + 'px';
     };
 
     const createGradient = (ctx: CanvasRenderingContext2D, chartArea: any) => {
@@ -98,7 +164,7 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
             lineEl.style.position = 'absolute';
             lineEl.style.bottom = '30px';
             lineEl.style.width = '0';
-            lineEl.style.height = '170px';
+            lineEl.style.height = '220px';
             const dashLength = 8;
             const gapLength = 12;
             const svgPattern = `data:image/svg+xml,%3Csvg width='3' height='${dashLength + gapLength}' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='1.5' y1='0' x2='1.5' y2='${dashLength}' stroke='%23e2bd7980' stroke-width='2'/%3E%3C/svg%3E`;
@@ -113,7 +179,6 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
     };
 
     const externalTooltipHandler = (context: any) => {
-        console.log(context);
         setPrice(context.tooltip.dataPoints[0].raw)
 
         const { chart, tooltip } = context;
@@ -164,7 +229,6 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
         tooltipEl.style.left = leftPosition + 'px';
         tooltipEl.style.top = positionY + tooltip.caretY + 'px';
 
-        // Position the vertical line
         lineEl.style.opacity = 1;
         lineEl.style.left = (positionX + caretX) + 'px';
     }
@@ -205,52 +269,68 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
 
 
     return (
-        <div style={{ height: '180px', width: '100%' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <Line
-                ref={chartRef}
-                key={`chart-${data.length}`}
-                options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        legend: {
-                            display: false,
-                        },
-                        title: {
-                            display: false,
-                        },
-                        tooltip: {
-                            enabled: false,
-                            position: 'fixedY' as any,
+        <div style={{ height: '200px', width: '100%' }}>
+            <div style={{ height: '100%', width: '100%' }}>
+                <Line
+                    ref={chartRef}
+                    key={`chart-${data.length}`}
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
                             mode: 'index',
                             intersect: false,
-                            external(args) {
-                                externalTooltipHandler(args);
+                        },
+                        plugins: {
+                            legend: {
+                                display: false,
                             },
-                            backgroundColor: 'transparent',
+                            title: {
+                                display: false,
+                            },
+                            tooltip: {
+                                enabled: false,
+                                position: 'fixedY' as any,
+                                mode: 'index',
+                                intersect: false,
+                                external(args) {
+                                    externalTooltipHandler(args);
+                                },
+                                backgroundColor: 'transparent',
+                            },
                         },
-                    },
-                    elements: {
-                        point: {
-                            radius: 0,
-                            hoverRadius: 0,
-                            hitRadius: 0,
+                        elements: {
+                            point: {
+                                radius: 0,
+                                hoverRadius: 0,
+                                hitRadius: 0,
+                            },
                         },
-                    },
-                    scales: {
-                        x: {
-                            display: false,
+                        scales: {
+                            x: {
+                                display: false,
+                            },
+                            y: {
+                                display: false,
+                            },
                         },
-                        y: {
-                            display: false,
-                        },
-                    },
+                    }}
+                    data={chartData}
+                />
+            </div>
+            <div
+                ref={wrapperRef}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '90%',
+                    pointerEvents: 'all'
                 }}
-                data={chartData}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onMouseMove={handleWrapperMouseMove}
             />
         </div>
     );
