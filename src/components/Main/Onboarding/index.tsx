@@ -25,8 +25,8 @@ export default function Onboarding() {
                                 You're almost done setting up your account
                             </p>
                         </div>
-                        <div className="flex flex-row items-center">
-                            <div className="flex flex-row items-center">
+                        <div className="w-full flex flex-row items-center">
+                            <div className="w-full flex flex-row items-center">
                                 <div className="w-full bg-neutral-700 rounded-full h-4">
                                     <div className="bg-primary-500 rounded-full h-4" style={{ width: '67%' }}>
                                     </div>

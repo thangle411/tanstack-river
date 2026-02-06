@@ -5,6 +5,7 @@ import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQue
 import { formatPrice } from "./utils";
 import useWebSocketPriceStore from "@/stores/websocketPriceStore";
 import Filters, { TFilter } from "./Filters";
+import { Odometer } from "@/components/Odometer";
 
 export default function BitcoinChart() {
     const [isChartHovered, setIsChartHovered] = useState(false);
@@ -40,7 +41,18 @@ export default function BitcoinChart() {
                     Bitcoin price
                 </div>
                 <div className="my-1 body-large-plus tabular-nums flex text-neutral-50">
-                    <span>{formatPrice(price)}</span>
+                    {isChartHovered ?
+                        <span>{formatPrice(price)}</span>
+                        :
+                        <span>$<Odometer
+                            value={price}
+                            duration={250}
+                            formatOptions={{
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                            }}
+                        /></span>
+                    }
                 </div>
                 <div>
                     <div className="body-small-plus">

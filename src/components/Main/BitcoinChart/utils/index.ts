@@ -1,6 +1,6 @@
 export const formatPrice = (price: number) => {
-    return price.toLocaleString('en-US', {
+    return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-    });
+    }).format(price)
 }
