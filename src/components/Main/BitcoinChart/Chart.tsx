@@ -269,9 +269,10 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
 
 
     return (
-        <div style={{ height: '200px', width: '100%' }}>
+        <div className="flex-1 h-[200px]">
             <div style={{ height: '100%', width: '100%' }}>
                 <Line
+                    className="w-full max-w-full"
                     ref={chartRef}
                     key={`chart-${data.length}`}
                     options={{

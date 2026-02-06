@@ -2,7 +2,7 @@ import MainLayout from '@/components/MainLayout'
 import { createFileRoute } from '@tanstack/react-router'
 import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from '@/hooks/query-options'
 import Container from '@/components/SharedContainer'
-import RoundButton from '@/components/Buttons/Button'
+import Button from '@/components/Buttons/Button'
 import { ChevronRight } from 'lucide-react'
 import BitcoinChart from '@/components/Main/BitcoinChart'
 import { Suspense } from 'react'
@@ -23,22 +23,24 @@ function App() {
   const setOpen = useBuySellModalStore((state) => state.setOpen);
   const setTab = useBuySellModalStore((state) => state.setTab);
 
+  console.log("test render")
+
   return (
     <MainLayout>
       <div className="flex flex-col w-full">
         <div className="flex justify-between items-center mb-4">
           <div className="title-small text-neutral-50">Home</div>
           <div className="hidden xl:flex gap-2">
-            <RoundButton variant="primary" onClick={() => { setOpen(true); setTab("one-time-buy") }}>
+            <Button variant="primary" classes='px-6' onClick={() => { setOpen(true); setTab("one-time-buy") }}>
               <span className="">
                 Buy Bitcoin
               </span>
-            </RoundButton>
-            <RoundButton variant="default" onClick={() => { setOpen(true); setTab("one-time-sell") }}>
+            </Button>
+            <Button variant="default" classes='px-6' onClick={() => { setOpen(true); setTab("one-time-sell") }}>
               <span className="">
                 Sell Bitcoin
               </span>
-            </RoundButton>
+            </Button>
           </div>
         </div>
 
@@ -69,14 +71,14 @@ function App() {
                 </button>
 
                 <div className="grid grid-cols-2 border-neutral-800 pt-1 gap-3">
-                  <RoundButton>
+                  <Button>
                     <span className="lg:hidden">Receive BTC</span>
                     <span className="hidden lg:inline whitespace-nowrap">Receive bitcoin</span>
-                  </RoundButton>
-                  <RoundButton>
+                  </Button>
+                  <Button>
                     <span className="lg:hidden">Send BTC</span>
                     <span className="hidden lg:inline whitespace-nowrap">Send bitcoin</span>
-                  </RoundButton>
+                  </Button>
                 </div>
               </Container>
 
@@ -104,21 +106,23 @@ function App() {
                   </div>
                 </button>
                 <div className="grid grid-cols-2 border-neutral-800 pt-1 gap-3">
-                  <RoundButton>
+                  <Button>
                     <span className="lg:hidden">Add cash</span>
                     <span className="hidden lg:inline whitespace-nowrap">Add cash</span>
-                  </RoundButton>
-                  <RoundButton>
+                  </Button>
+                  <Button>
                     <span className="lg:hidden">Withdraw cash</span>
                     <span className="hidden lg:inline whitespace-nowrap">Withdraw cash</span>
-                  </RoundButton>
+                  </Button>
                 </div>
               </Container>
             </div>
             <BitcoinInterest />
           </div>
 
-          <Onboarding />
+          <div className="space-y-4 xl:max-w-[368px]">
+            <Onboarding />
+          </div>
         </div>
       </div>
     </MainLayout >

@@ -80,7 +80,7 @@ export default function Carousel() {
                                             <div className="text-neutral-300 font-light text-sm leading-normal text-neutral-300">
                                                 {item.subtitle}
                                             </div>
-                                            <Button onClick={item.action} variant="default">{item.buttonText}</Button>
+                                            <Button onClick={item.action} classes='px-6' variant="default">{item.buttonText}</Button>
                                         </div>
                                         <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center">
                                             {item.icon}

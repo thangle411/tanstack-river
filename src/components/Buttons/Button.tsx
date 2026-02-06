@@ -4,7 +4,7 @@ const baseClasses = `
   focus:outline-none focus-visible:outline-none focus-visible:ring-2 
   focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 
   active:ring-0 active:opacity-60 
-  body-small-plus px-6 py-2
+  body-small-plus py-2
   cursor-pointer
 `.trim().replace(/\s+/g, ' ')
 
