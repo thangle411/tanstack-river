@@ -61,12 +61,12 @@ export default function Carousel() {
     ]
 
     return (
-        <div>
+        <div className="max-w-[368px] sm:max-w-full md:max-w-full">
             <div className="overflow-hidden">
                 <div className={`flex relative transition-transform duration-200 ease-in-out`} style={{ transform: `translateX(-${current * 104.4}%)` }}>
                     {data.map((item, index) => (
-                        <div key={index} className={`min-w-full mr-4 relative`}>
-                            <SharedContainer>
+                        <div key={index} className="min-w-full mr-4 relative">
+                            <SharedContainer >
                                 <div>
                                     <div className="text-neutral-50 font-semibold ">{item.title}
                                         {item.isNew && <span className="ml-2 inline-flex items-center justify-center rounded-full h-7 px-3 bg-gradient-to-br from-[#D4B583]/20 to-[#987B4A]/20 ">
