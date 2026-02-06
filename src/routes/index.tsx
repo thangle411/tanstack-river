@@ -23,7 +23,7 @@ function App() {
   const setOpen = useBuySellModalStore((state) => state.setOpen);
   const setTab = useBuySellModalStore((state) => state.setTab);
 
-  console.log("test render")
+  console.log("Main route")
 
   return (
     <MainLayout>

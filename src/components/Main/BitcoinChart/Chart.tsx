@@ -265,7 +265,7 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
         };
 
         setChartData(chartData);
-    }, []);
+    }, [data]);
 
 
     return (
