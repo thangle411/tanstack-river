@@ -8,8 +8,10 @@ export const Route = createFileRoute('/documents')({
 function RouteComponent() {
   return (
     <MainLayout>
-      <div className='text-neutral-50'>
-        Documents
+      <div className="flex flex-col w-full">
+        <div className="flex justify-between items-center mb-4">
+          <div className="title-small text-neutral-50">Taxes & Documents</div>
+        </div>
       </div>
     </MainLayout>
   )

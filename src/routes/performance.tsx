@@ -8,8 +8,10 @@ export const Route = createFileRoute('/performance')({
 function RouteComponent() {
   return (
     <MainLayout>
-      <div className='text-neutral-50'>
-        Performance
+      <div className="flex flex-col w-full">
+        <div className="flex justify-between items-center mb-4">
+          <div className="title-small text-neutral-50">Performance</div>
+        </div>
       </div>
     </MainLayout>
   )
