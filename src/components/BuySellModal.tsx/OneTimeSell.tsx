@@ -5,6 +5,7 @@ import useBuySellModalStore from "@/stores/buySellModalStore";
 import Button from "../Buttons/Button";
 import Input from "./Input";
 import { handleAmountChange } from "./utils/handleAmountChange";
+import { validate } from "./utils/validate";
 
 export default function OneTimeSell() {
     const setTab = useBuySellModalStore((state) => state.setTab)
@@ -22,8 +23,8 @@ export default function OneTimeSell() {
     }, [amount, websocketPrice])
 
     const handleAmountChangeLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const formattedAmount = handleAmountChange(e.target.value);
-        console.log(formattedAmount);
+        const validatedAmount = validate(e.target.value, 'cash');
+        const formattedAmount = handleAmountChange(validatedAmount, 'cash');
         setAmount(formattedAmount);
     }
 

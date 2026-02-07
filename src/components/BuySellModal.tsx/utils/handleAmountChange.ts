@@ -1,4 +1,4 @@
-export const handleAmountChange = (value: string): string => {
+export const handleAmountChange = (value: string, type: 'cash' | 'btc'): string => {
     value = value.replace(/^\$/, '').replace(/,/g, '')
     value = value.replace(/[^\d.]/g, '')
     const parts = value.split('.')
@@ -6,18 +6,19 @@ export const handleAmountChange = (value: string): string => {
         value = parts[0] + '.' + parts.slice(1).join('')
     }
 
+
     if (value) {
         const [integerPart, decimalPart] = value.split('.')
         const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
-        if (decimalPart === '00') {
+        if (type === "cash" && decimalPart?.startsWith('00')) {
             return `$${formattedInteger}`
         }
 
         const formattedValue = decimalPart !== undefined
             ? `${formattedInteger}.${decimalPart}`
             : formattedInteger
-        return `$${formattedValue}`
+        return type === "cash" ? `$${formattedValue}` : `${formattedValue} BTC`
     } else {
         return ''
     }

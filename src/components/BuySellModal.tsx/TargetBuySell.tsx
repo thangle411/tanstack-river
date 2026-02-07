@@ -4,12 +4,13 @@ import Input from "./Input";
 import { useEffect, useState } from "react";
 import { handleAmountChange } from "./utils/handleAmountChange";
 import { Odometer } from "../Odometer";
+import { validate } from "./utils/validate";
 
 const PERCENTAGES = [2, 5, 10];
 
 export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
     const websocketPrice = useWebSocketPriceStore((state) => state.price);
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState(0);
     const [chosenPercent, setChosenPercent] = useState(0);
 
     const handlePercentSelect = (percent: number) => {
@@ -18,20 +19,22 @@ export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
 
     useEffect(() => {
         if (!chosenPercent) return;
-        const formattedAmount = handleAmountChange((websocketPrice + ((chosenPercent / 100 * websocketPrice))).toFixed(2));
-        setAmount(formattedAmount);
+        if (type === 'sell') {
+            setAmount((websocketPrice + ((chosenPercent / 100 * websocketPrice))));
+        } else {
+            setAmount((websocketPrice - ((chosenPercent / 100 * websocketPrice))));
+        }
     }, [chosenPercent, websocketPrice])
 
     const handleAmountChangeLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const validatedValue = validate(e.target.value.replace(/[^\d.]/g, ''), 'cash');
         setChosenPercent(0);
-        const formattedAmount = handleAmountChange(e.target.value);
-        setAmount(formattedAmount);
+        setAmount(Number(validatedValue.replace(/[^\d.]/g, '')));
     }
 
     const handleCurrentPriceClick = () => {
         setChosenPercent(0);
-        const formattedAmount = handleAmountChange(websocketPrice.toFixed(2));
-        setAmount(formattedAmount);
+        setAmount(websocketPrice);
     }
 
     return (
@@ -47,15 +50,15 @@ export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
                             &nbsp; $<Odometer value={websocketPrice} duration={250} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                         </span>
                     </p>
-                    <Input amount={amount} handleAmountChange={handleAmountChangeLocal}
+                    <Input amount={handleAmountChange(amount.toFixed(2), 'cash')} handleAmountChange={handleAmountChangeLocal}
                         onFocus={() => setChosenPercent(0)}
                     />
-                    {Number(amount.replace(/[^\d.]/g, '')) > 0 && (
+                    {amount > 0 && (
                         <div className="text-neutral-500 mt-4">
                             {chosenPercent ?
-                                <span>{chosenPercent}% from current price</span>
+                                <span>{type === "buy" ? "-" : "+"}{chosenPercent}% from current price</span>
                                 :
-                                <span>{((Number(amount.replace(/[^\d.]/g, '')) - websocketPrice) / websocketPrice * 100).toFixed(1)}% from current price</span>
+                                <span>{((amount - websocketPrice) / websocketPrice * 100).toFixed(1)}% from current price</span>
                             }
                         </div>
                     )}
