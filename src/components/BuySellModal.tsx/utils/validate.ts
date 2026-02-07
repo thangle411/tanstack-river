@@ -1,9 +1,8 @@
 export const validate = (value: string, type: 'cash' | 'btc',) => {
-    const [integerPart, _] = value.split('.')
-
-    if (type === 'cash' && integerPart.length > 10) {
+    let valueAsNumber = Number(value.replace(/^\$/, '').replace(/,/g, ''))
+    if (type === 'cash' && valueAsNumber > 1_000_000_000) {
         return `$1,000,000,000`
-    } else if (type === 'btc' && integerPart.length > 4) {
+    } else if (type === 'btc' && valueAsNumber > 1_000) {
         return `1000 BTC`
     }
     return value
