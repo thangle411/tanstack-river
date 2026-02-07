@@ -7,6 +7,8 @@ interface IBuySellModalStore {
     setOpen: (open: boolean) => void
     tab: TBuySellModalView
     setTab: (tab: TBuySellModalView) => void
+    showRecurringOrdersType: boolean
+    setShowRecurringOrdersType: (showRecurringOrdersType: boolean) => void
 }
 
 const useBuySellModalStore = create<IBuySellModalStore>((set) => ({
@@ -14,6 +16,8 @@ const useBuySellModalStore = create<IBuySellModalStore>((set) => ({
     setOpen: (open: boolean) => set({ open }),
     tab: "one-time-buy",
     setTab: (tab: TBuySellModalView) => set({ tab }),
+    showRecurringOrdersType: false,
+    setShowRecurringOrdersType: (showRecurringOrdersType: boolean) => set({ showRecurringOrdersType })
 }))
 
 export default useBuySellModalStore

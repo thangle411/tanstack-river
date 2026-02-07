@@ -1,7 +1,9 @@
 import { Bitcoin, ChevronRightIcon, CrosshairIcon } from "lucide-react";
 import useBuySellModalStore from "@/stores/buySellModalStore";
+import RecurringOrders from "./RecurringOrders";
 
 export default function OrderType() {
+    const showRecurringOrdersType = useBuySellModalStore((state) => state.showRecurringOrdersType)
     const setTab = useBuySellModalStore((state) => state.setTab)
 
     return (
@@ -52,6 +54,10 @@ export default function OrderType() {
                     </div>
                 </button>
             </div>
+
+            {showRecurringOrdersType &&
+                <RecurringOrders />
+            }
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import useBuySellModalStore from "@/stores/buySellModalStore"
-import { XIcon } from "lucide-react"
+import { ArrowLeftIcon, XIcon } from "lucide-react"
 import AddCashTab from "./AddCashTab"
 import OrderType from "./OrderType"
 import OneTimeBuy from "./OneTimeBuy"
@@ -21,6 +21,7 @@ export default function BuySellModal() {
     const tab = useBuySellModalStore((state) => state.tab)
     const setOpen = useBuySellModalStore((state) => state.setOpen)
     const setTab = useBuySellModalStore((state) => state.setTab)
+    const setShowRecurringOrdersType = useBuySellModalStore((state) => state.setShowRecurringOrdersType)
     const [isAnimating, setIsAnimating] = useState(false)
     const [shouldRender, setShouldRender] = useState(false)
 
@@ -39,6 +40,18 @@ export default function BuySellModal() {
 
     const handleClose = () => {
         setOpen(false)
+    }
+
+    const handleBackClick = () => {
+        if (tab === "target-buy") {
+            setShowRecurringOrdersType(true)
+            setTab("order-type");
+        } else if (tab === "target-sell") {
+            setShowRecurringOrdersType(false)
+            setTab("order-type");
+        } else if (tab === "one-time-buy" || tab === "one-time-sell") {
+            setTab("add-cash");
+        }
     }
 
     const renderTabButtons = () => {
@@ -99,6 +112,12 @@ export default function BuySellModal() {
                         bg-neutral-900 rounded-2xl w-[475px] transition-opacity duration-300 ${isAnimating ? "opacity-100" : "opacity-0"
                         }`}>
                         <div className="relative flex justify-between items-center">
+                            {tab === 'target-buy' || tab === 'target-sell' ? (
+                                <button onClick={handleBackClick} type="button"
+                                    className="cursor-pointer absolute left-5 top-5">
+                                    <ArrowLeftIcon className="w-7 h-7 text-neutral-500" />
+                                </button>
+                            ) : null}
                             <div className="body-medium-plus text-center w-full p-5">
                                 {titles[tab]}
                             </div>
