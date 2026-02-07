@@ -2,7 +2,7 @@ import { Odometer } from "@/components/Odometer";
 import { formatPrice } from "./utils";
 import useChartPriceStore from "@/stores/chartPriceStore";
 import useWebSocketPriceStore from "@/stores/websocketPriceStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface IPriceDisplay {
     data: { timestamp: Date; price: number }[];
@@ -14,6 +14,10 @@ export default function PriceDisplay({ data, priceData }: IPriceDisplay) {
     const isChartHovered = useChartPriceStore((state) => state.isChartHovered);
     const chartPrice = useChartPriceStore((state) => state.price);
     const setChartPrice = useChartPriceStore((state) => state.setPrice);
+    const change = {
+        percent: (chartPrice - data[0].price) / chartPrice * 100,
+        amount: chartPrice - data[0].price
+    }
 
     useEffect(() => {
         if (isChartHovered) return;
@@ -44,10 +48,14 @@ export default function PriceDisplay({ data, priceData }: IPriceDisplay) {
                 }
             </div>
             <div>
-                <div className="body-small-plus">
-                    <span className={`${priceData.market_data.price_change_24h > 0 ? 'text-green-500' : 'text-red-500'}`}>{formatPrice(priceData.market_data.price_change_24h)} ({priceData.market_data.price_change_percentage_24h.toFixed(2)}%)</span>
-                    <span className="text-neutral-300 body-small ml-1">Past 24 hours</span>
-                </div>
+                {isChartHovered ?
+                    <div className="body-small-plus">
+                        <span className={`${change.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>{formatPrice(change.amount)} ({change.percent.toFixed(2)}%)</span>
+                    </div> : <div className="body-small-plus">
+                        <span className={`${priceData.market_data.price_change_24h > 0 ? 'text-green-500' : 'text-red-500'}`}>{formatPrice(priceData.market_data.price_change_24h)} ({priceData.market_data.price_change_percentage_24h.toFixed(2)}%)</span>
+                        <span className="text-neutral-300 body-small ml-1">Past 24 hours</span>
+                    </div>
+                }
             </div>
         </div>
     )
