@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Home, ChartNoAxesCombined, FileText, Clock, Headphones, Settings, Box, ChevronRight } from "lucide-react";
 import NavbarItem from "./NavbarItem";
 import useBuySellModalStore from "@/stores/buySellModalStore";

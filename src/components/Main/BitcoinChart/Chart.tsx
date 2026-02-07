@@ -1,3 +1,4 @@
+import useChartPriceStore from '@/stores/chartPriceStore';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -39,11 +40,11 @@ export const options = {
 
 interface IChartProps {
     data: { timestamp: Date; price: number }[];
-    setIsChartHovered: (isChartHovered: boolean) => void;
-    setPrice: (price: number) => void;
 }
 
-export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps) {
+export default function Chart({ data }: IChartProps) {
+    const setChartPrice = useChartPriceStore((state) => state.setPrice);
+    const setIsChartHovered = useChartPriceStore((state) => state.setIsChartHovered);
     const chartRef = useRef<ChartJS<"line">>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [chartData, setChartData] = useState<ChartData<'line'>>({
@@ -85,7 +86,7 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
         const clampedIndex = Math.max(0, Math.min(dataIndex, data.length - 1));
         const dataPoint = data[clampedIndex];
 
-        setPrice(dataPoint.price);
+        setChartPrice(dataPoint.price);
 
         const tooltipEl = getOrCreateTooltip(chart);
         const lineEl = getOrCreateVerticalLine(chart);
@@ -178,7 +179,7 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
     };
 
     const externalTooltipHandler = (context: any) => {
-        setPrice(context.tooltip.dataPoints[0].raw)
+        setChartPrice(context.tooltip.dataPoints[0].raw)
 
         const { chart, tooltip } = context;
         const tooltipEl = getOrCreateTooltip(chart);
