@@ -56,7 +56,7 @@ export default function BitcoinChart() {
                 </div>
                 <div>
                     <div className="body-small-plus">
-                        {priceData.market_data.price_change_24h > 0 && <span>-</span>}
+                        {priceData.market_data.price_change_24h < 0 && <span>-</span>}
                         <span className={`${priceData.market_data.price_change_24h > 0 ? 'text-green-500' : 'text-red-500'}`}>{formatPrice(priceData.market_data.price_change_24h)} ({priceData.market_data.price_change_percentage_24h.toFixed(2)}%)</span>
                         <span className="text-neutral-300 body-small ml-1">Past 24 hours</span>
                     </div>

@@ -23,8 +23,6 @@ function App() {
   const setOpen = useBuySellModalStore((state) => state.setOpen);
   const setTab = useBuySellModalStore((state) => state.setTab);
 
-  console.log("Main route")
-
   return (
     <MainLayout>
       <div className="flex flex-col w-full">

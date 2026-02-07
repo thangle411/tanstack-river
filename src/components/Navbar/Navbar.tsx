@@ -59,7 +59,7 @@ export default function Navbar() {
                         <Link to="/" className="focus-visible:outline-none">
                             <img src="/logo.svg" alt="logo" className="mb-6 h-[28px]" />
                         </Link>
-                        <Link to="/performance" className="flex flex-row px-4 py-3 mb-4 rounded-2xl bg-neutral-900 justify-between items-center hover:bg-neutral-800 focus:bg-neutral-800 cursor-pointer">
+                        <Link to="/performance/account" className="flex flex-row px-4 py-3 mb-4 rounded-2xl bg-neutral-900 justify-between items-center hover:bg-neutral-800 focus:bg-neutral-800 cursor-pointer">
                             <div className="body-small text-neutral-50">
                                 <div className="body-small text-neutral-300 mb-0.5">Account value</div>
                                 <div className="body-regular-plus mb-0.5">$0.00</div>

@@ -1,7 +1,9 @@
 import MainLayout from '@/components/MainLayout'
+import { BitcoinReturns } from '@/components/Performance/BitcoinReturns'
+import TabsBar from '@/components/Performance/TabsBar'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/performance')({
+export const Route = createFileRoute('/performance/')({
   component: RouteComponent,
 })
 
@@ -12,6 +14,10 @@ function RouteComponent() {
         <div className="flex justify-between items-center mb-4">
           <div className="title-small text-neutral-50">Performance</div>
         </div>
+      </div>
+      <TabsBar tab="bitcoin_returns" />
+      <div>
+        <BitcoinReturns />
       </div>
     </MainLayout>
   )

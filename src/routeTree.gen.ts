@@ -11,12 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as EarnRewardsRouteImport } from './routes/earn-rewards'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PerformanceIndexRouteImport } from './routes/performance/index'
+import { Route as PerformanceTabRouteImport } from './routes/performance/$tab'
 
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
@@ -26,11 +27,6 @@ const SupportRoute = SupportRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PerformanceRoute = PerformanceRouteImport.update({
-  id: '/performance',
-  path: '/performance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -58,6 +54,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PerformanceIndexRoute = PerformanceIndexRouteImport.update({
+  id: '/performance/',
+  path: '/performance/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerformanceTabRoute = PerformanceTabRouteImport.update({
+  id: '/performance/$tab',
+  path: '/performance/$tab',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -65,9 +71,10 @@ export interface FileRoutesByFullPath {
   '/documents': typeof DocumentsRoute
   '/earn-rewards': typeof EarnRewardsRoute
   '/login': typeof LoginRoute
-  '/performance': typeof PerformanceRoute
   '/settings': typeof SettingsRoute
   '/support': typeof SupportRoute
+  '/performance/$tab': typeof PerformanceTabRoute
+  '/performance/': typeof PerformanceIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,9 +82,10 @@ export interface FileRoutesByTo {
   '/documents': typeof DocumentsRoute
   '/earn-rewards': typeof EarnRewardsRoute
   '/login': typeof LoginRoute
-  '/performance': typeof PerformanceRoute
   '/settings': typeof SettingsRoute
   '/support': typeof SupportRoute
+  '/performance/$tab': typeof PerformanceTabRoute
+  '/performance': typeof PerformanceIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,9 +94,10 @@ export interface FileRoutesById {
   '/documents': typeof DocumentsRoute
   '/earn-rewards': typeof EarnRewardsRoute
   '/login': typeof LoginRoute
-  '/performance': typeof PerformanceRoute
   '/settings': typeof SettingsRoute
   '/support': typeof SupportRoute
+  '/performance/$tab': typeof PerformanceTabRoute
+  '/performance/': typeof PerformanceIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,9 +107,10 @@ export interface FileRouteTypes {
     | '/documents'
     | '/earn-rewards'
     | '/login'
-    | '/performance'
     | '/settings'
     | '/support'
+    | '/performance/$tab'
+    | '/performance/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,9 +118,10 @@ export interface FileRouteTypes {
     | '/documents'
     | '/earn-rewards'
     | '/login'
-    | '/performance'
     | '/settings'
     | '/support'
+    | '/performance/$tab'
+    | '/performance'
   id:
     | '__root__'
     | '/'
@@ -118,9 +129,10 @@ export interface FileRouteTypes {
     | '/documents'
     | '/earn-rewards'
     | '/login'
-    | '/performance'
     | '/settings'
     | '/support'
+    | '/performance/$tab'
+    | '/performance/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -129,9 +141,10 @@ export interface RootRouteChildren {
   DocumentsRoute: typeof DocumentsRoute
   EarnRewardsRoute: typeof EarnRewardsRoute
   LoginRoute: typeof LoginRoute
-  PerformanceRoute: typeof PerformanceRoute
   SettingsRoute: typeof SettingsRoute
   SupportRoute: typeof SupportRoute
+  PerformanceTabRoute: typeof PerformanceTabRoute
+  PerformanceIndexRoute: typeof PerformanceIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,13 +161,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/performance': {
-      id: '/performance'
-      path: '/performance'
-      fullPath: '/performance'
-      preLoaderRoute: typeof PerformanceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -192,6 +198,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/performance/': {
+      id: '/performance/'
+      path: '/performance'
+      fullPath: '/performance/'
+      preLoaderRoute: typeof PerformanceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/performance/$tab': {
+      id: '/performance/$tab'
+      path: '/performance/$tab'
+      fullPath: '/performance/$tab'
+      preLoaderRoute: typeof PerformanceTabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -201,9 +221,10 @@ const rootRouteChildren: RootRouteChildren = {
   DocumentsRoute: DocumentsRoute,
   EarnRewardsRoute: EarnRewardsRoute,
   LoginRoute: LoginRoute,
-  PerformanceRoute: PerformanceRoute,
   SettingsRoute: SettingsRoute,
   SupportRoute: SupportRoute,
+  PerformanceTabRoute: PerformanceTabRoute,
+  PerformanceIndexRoute: PerformanceIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

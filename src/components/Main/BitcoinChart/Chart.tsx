@@ -72,7 +72,6 @@ export default function Chart({ data, setIsChartHovered, setPrice }: IChartProps
     };
 
     const handleWrapperMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        console.log(e, chartRef.current, wrapperRef.current);
         const chart = chartRef.current;
         const wrapper = wrapperRef.current;
         if (!chart || !wrapper) return;

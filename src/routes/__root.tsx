@@ -1,4 +1,4 @@
-import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router'
+import { Outlet, createRootRouteWithContext, redirect, useLocation } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import Navbar from '@/components/Navbar/Navbar'
@@ -25,6 +25,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext()
+  const { pathname } = useLocation();
   const user = queryClient.getQueryData(userQueryOptions().queryKey)
 
   if (!user) {
@@ -33,9 +34,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Navbar />
+      {pathname !== '/login' &&
+        <>
+          <Navbar />
+          <BuySellModal />
+        </>
+      }
       <Outlet />
-      <BuySellModal />
     </QueryClientProvider>
   )
 }
