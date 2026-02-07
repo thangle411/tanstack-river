@@ -10,37 +10,28 @@ const PERCENTAGES = [2, 5, 10];
 export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
     const websocketPrice = useWebSocketPriceStore((state) => state.price);
     const [amount, setAmount] = useState("");
-    const [transactionAmount, setTransactionAmount] = useState(0);
-    const [percent, setPercent] = useState(0);
     const [chosenPercent, setChosenPercent] = useState(0);
 
     const handlePercentSelect = (percent: number) => {
         setChosenPercent(percent);
-        if (type === "sell") {
-            handleAmountChange((websocketPrice + ((percent / 100 * websocketPrice))).toFixed(2), setAmount)
-        } else {
-            handleAmountChange((websocketPrice - ((percent / 100 * websocketPrice))).toFixed(2), setAmount)
-        }
     }
 
     useEffect(() => {
-        if (chosenPercent === 0) return;
-        setAmount((websocketPrice + ((chosenPercent / 100 * websocketPrice))).toFixed(2));
+        if (!chosenPercent) return;
+        const formattedAmount = handleAmountChange((websocketPrice + ((chosenPercent / 100 * websocketPrice))).toFixed(2));
+        setAmount(formattedAmount);
     }, [chosenPercent, websocketPrice])
-
-    useEffect(() => {
-        if (!amount) {
-            setTransactionAmount(0);
-            return;
-        }
-        const formattedAmount = Number(amount.replace(/[^\d.]/g, ''));
-        setTransactionAmount(formattedAmount / websocketPrice);
-        setPercent((formattedAmount - websocketPrice) / websocketPrice * 100);
-    }, [amount, websocketPrice])
 
     const handleAmountChangeLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
         setChosenPercent(0);
-        handleAmountChange(e.target.value, setAmount)
+        const formattedAmount = handleAmountChange(e.target.value);
+        setAmount(formattedAmount);
+    }
+
+    const handleCurrentPriceClick = () => {
+        setChosenPercent(0);
+        const formattedAmount = handleAmountChange(websocketPrice.toFixed(2));
+        setAmount(formattedAmount);
     }
 
     return (
@@ -52,23 +43,25 @@ export default function TargetBuySell({ type }: { type: "buy" | "sell" }) {
                     </h2>
                     <p className="mt-2 mb-4">
                         <span className="text-neutral-500">Current price:</span>
-                        <span className="text-primary-500">
+                        <span className="text-primary-500" onClick={handleCurrentPriceClick}>
                             &nbsp; $<Odometer value={websocketPrice} duration={250} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
                         </span>
                     </p>
-                    <Input amount={amount} handleAmountChange={handleAmountChangeLocal} />
-                    {transactionAmount > 0 && (
+                    <Input amount={amount} handleAmountChange={handleAmountChangeLocal}
+                        onFocus={() => setChosenPercent(0)}
+                    />
+                    {Number(amount.replace(/[^\d.]/g, '')) > 0 && (
                         <div className="text-neutral-500 mt-4">
                             {chosenPercent ?
                                 <span>{chosenPercent}% from current price</span>
                                 :
-                                <span>{percent > 0 && "+"}{percent.toFixed(2)}% from current price</span>
+                                <span>{((Number(amount.replace(/[^\d.]/g, '')) - websocketPrice) / websocketPrice * 100).toFixed(1)}% from current price</span>
                             }
                         </div>
                     )}
                     <div className="grid grid-cols-3 gap-2 w-full mt-6">
                         {PERCENTAGES.map((percent) => (
-                            <button type="button" onClick={() => handlePercentSelect(percent)} key={percent} className="inline-flex justify-center items-center gap-2 tracking-[0.45px] rounded-full transition-transform duration-100 cursor-pointer active:opacity-80 active:scale-97 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 h-11 body-small px-5 text-neutral-50 bg-neutral-800 hover:bg-neutral-700 focus-visible:ring-neutral-700 focus-visible:ring-offset-neutral-950 w-full">
+                            <button type="button" onClick={() => handlePercentSelect(percent)} key={percent} className={`${percent === chosenPercent ? "bg-neutral-700" : "bg-neutral-800"} inline-flex justify-center items-center gap-2 tracking-[0.45px] rounded-full transition-transform duration-100 cursor-pointer active:opacity-80 active:scale-97 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 h-11 body-small px-5 text-neutral-50 hover:bg-neutral-700 focus-visible:ring-neutral-700 focus-visible:ring-offset-neutral-950 w-full`}>
                                 {type === "buy" ? "-" : "+"}{percent}%
                             </button>
                         ))}

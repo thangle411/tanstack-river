@@ -1,14 +1,15 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 
 interface INavbarItem {
     to: string;
     icon: any;
     label: string;
-    href: string;
+    routeToMatch: string[];
 }
 
 export default function NavbarItem({ item }: { item: INavbarItem }) {
-    const isActive = item.href === item.to;
+    const location = useLocation();
+    const isActive = item.routeToMatch.some(route => location.pathname === route);
 
     return (
         <Link to={item.to} className="group focus-visible:outline-none">

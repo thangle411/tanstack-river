@@ -1,4 +1,4 @@
-export const handleAmountChange = (value: string, setAmount: (amount: string) => void) => {
+export const handleAmountChange = (value: string): string => {
     value = value.replace(/^\$/, '').replace(/,/g, '')
     value = value.replace(/[^\d.]/g, '')
     const parts = value.split('.')
@@ -9,11 +9,16 @@ export const handleAmountChange = (value: string, setAmount: (amount: string) =>
     if (value) {
         const [integerPart, decimalPart] = value.split('.')
         const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+        if (decimalPart === '00') {
+            return `$${formattedInteger}`
+        }
+
         const formattedValue = decimalPart !== undefined
             ? `${formattedInteger}.${decimalPart}`
             : formattedInteger
-        setAmount(`$${formattedValue}`)
+        return `$${formattedValue}`
     } else {
-        setAmount('')
+        return ''
     }
 }

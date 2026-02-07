@@ -22,7 +22,9 @@ export default function OneTimeSell() {
     }, [amount, websocketPrice])
 
     const handleAmountChangeLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-        handleAmountChange(e.target.value, setAmount)
+        const formattedAmount = handleAmountChange(e.target.value);
+        console.log(formattedAmount);
+        setAmount(formattedAmount);
     }
 
     return (

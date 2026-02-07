@@ -9,21 +9,25 @@ const topSection = [
         to: "/",
         icon: Home,
         label: "Home",
+        routeToMatch: ["/"]
     },
     {
         to: "/account",
         icon: Clock,
         label: "Activity & Orders",
+        routeToMatch: ["/account"]
     },
     {
         to: "/performance",
         icon: ChartNoAxesCombined,
         label: "Performance",
+        routeToMatch: ["/performance", "/performance/account", "/performance/bitcoin_lots"]
     },
     {
         to: "/documents",
         icon: FileText,
         label: "Taxes & Documents",
+        routeToMatch: ["/documents"]
     },
 ];
 const bottomSection = [
@@ -31,22 +35,24 @@ const bottomSection = [
         to: "/earn-rewards",
         icon: Box,
         label: "Earn Rewards",
+        routeToMatch: ["/earn-rewards"]
     },
     {
         to: "/support",
         icon: Headphones,
         label: "Support",
+        routeToMatch: ["/support"]
     },
     {
         to: "/settings",
         icon: Settings,
         label: "Profile & Settings",
+        routeToMatch: ["/settings"]
     },
 ];
 
 
 export default function Navbar() {
-    const location = useLocation();
     const setOpen = useBuySellModalStore((state) => state.setOpen)
     const setTab = useBuySellModalStore((state) => state.setTab)
 
@@ -69,7 +75,7 @@ export default function Navbar() {
                             </div>
                         </Link>
                         {topSection.map((item, index) => (
-                            <NavbarItem key={index} item={{ ...item, href: location.href }} />
+                            <NavbarItem key={index} item={{ ...item }} />
                         ))}
                     </div>
                     <div className="flex flex-col">
@@ -80,7 +86,7 @@ export default function Navbar() {
                             </Button>
                         </div>
                         {bottomSection.map((item, index) => (
-                            <NavbarItem key={index} item={{ ...item, href: location.href }} />
+                            <NavbarItem key={index} item={{ ...item }} />
                         ))}
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import Button from '@/components/Buttons/Button'
 
 export const Route = createFileRoute('/login')({
