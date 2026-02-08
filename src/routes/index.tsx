@@ -11,7 +11,8 @@ import useBuySellModalStore from '@/stores/buySellModalStore'
 import BitcoinInterest from '@/components/Main/BitcoinInterest'
 import { BitcoinChartSuspense } from '@/components/Main/BitcoinChart/BitcoinChartSuspense'
 import CoinsList, { CoinsListLoader } from '@/components/Main/CoinsList'
-import useWebSocketPriceStore from '@/stores/websocketPriceStore'
+import { useWebsocket } from '@/hooks/useWebsocket'
+import useWatchCoinStore from '@/stores/watchCoinStore'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -23,10 +24,11 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
+  const watchCoin = useWatchCoinStore((state) => state.watchCoin);
   const setOpen = useBuySellModalStore((state) => state.setOpen);
   const setTab = useBuySellModalStore((state) => state.setTab);
+  useWebsocket(watchCoin)
 
-  useWebSocketPriceStore
   return (
     <MainLayout>
       <div className="flex flex-col w-full">
