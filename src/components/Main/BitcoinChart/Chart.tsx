@@ -142,7 +142,7 @@ export default function Chart({ data }: IChartProps) {
             tooltipEl.style.opacity = 1;
             tooltipEl.style.pointerEvents = 'none';
             tooltipEl.style.position = 'absolute';
-            tooltipEl.style.minWidth = '150px';
+            tooltipEl.style.minWidth = '180px';
             tooltipEl.style.transform = 'translateY(-25px)';
             tooltipEl.style.fontSize = '16px';
 
