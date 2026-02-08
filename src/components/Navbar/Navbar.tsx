@@ -3,6 +3,7 @@ import { Home, ChartNoAxesCombined, FileText, Clock, Headphones, Settings, Box, 
 import NavbarItem from "./NavbarItem";
 import useBuySellModalStore from "@/stores/buySellModalStore";
 import Button from "../Buttons/Button";
+import useWatchCoinStore from "@/stores/watchCoinStore";
 
 const topSection = [
     {
@@ -53,8 +54,15 @@ const bottomSection = [
 
 
 export default function Navbar() {
+    const setWatchCoin = useWatchCoinStore((state) => state.setWatchCoin)
     const setOpen = useBuySellModalStore((state) => state.setOpen)
     const setTab = useBuySellModalStore((state) => state.setTab)
+
+    const handleOnBuyBitcoin = () => {
+        setOpen(true)
+        setTab("one-time-buy")
+        setWatchCoin({ id: "bitcoin", symbol: "btc" })
+    }
 
     return (
         <nav>
@@ -80,7 +88,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex flex-col">
                         <div className="mb-4">
-                            <Button onClick={() => { setOpen(true); setTab("one-time-buy") }} type="button"
+                            <Button onClick={handleOnBuyBitcoin} type="button"
                                 variant="primary" classes="w-full">
                                 Buy bitcoin
                             </Button>

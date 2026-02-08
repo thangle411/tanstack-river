@@ -25,9 +25,16 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const watchCoin = useWatchCoinStore((state) => state.watchCoin);
+  const setWatchCoin = useWatchCoinStore((state) => state.setWatchCoin)
   const setOpen = useBuySellModalStore((state) => state.setOpen);
   const setTab = useBuySellModalStore((state) => state.setTab);
   useWebsocket(watchCoin)
+
+  const handleOnTradeBitcoin = (type: "one-time-buy" | "one-time-sell") => {
+    setOpen(true)
+    setTab(type)
+    setWatchCoin({ id: "bitcoin", symbol: "btc" })
+  }
 
   return (
     <MainLayout>
@@ -35,12 +42,12 @@ function App() {
         <div className="flex justify-between items-center mb-4">
           <div className="title-small text-neutral-50">Home</div>
           <div className="hidden xl:flex gap-2">
-            <Button variant="primary" classes='px-6' onClick={() => { setOpen(true); setTab("one-time-buy") }}>
+            <Button variant="primary" classes='px-6' onClick={() => handleOnTradeBitcoin("one-time-buy")}>
               <span className="">
                 Buy Bitcoin
               </span>
             </Button>
-            <Button variant="default" classes='px-6' onClick={() => { setOpen(true); setTab("one-time-sell") }}>
+            <Button variant="default" classes='px-6' onClick={() => handleOnTradeBitcoin("one-time-sell")}>
               <span className="">
                 Sell Bitcoin
               </span>

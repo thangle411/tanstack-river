@@ -26,7 +26,7 @@ export default function CoinsList() {
 
     return (
         <div
-            className="overflow-hidden relative bg-neutral-900 p-2"
+            className="overflow-hidden relative bg-neutral-900 p-2 max-w-[368px] sm:max-w-full md:max-w-full"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
