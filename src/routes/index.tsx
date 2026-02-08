@@ -1,6 +1,6 @@
 import MainLayout from '@/components/MainLayout'
 import { createFileRoute } from '@tanstack/react-router'
-import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from '@/hooks/query-options'
+import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions, topCoinsQueryOptions } from '@/hooks/query-options'
 import Container from '@/components/SharedContainer'
 import Button from '@/components/Buttons/Button'
 import { ChevronRight } from 'lucide-react'
@@ -10,12 +10,14 @@ import Onboarding from '@/components/Main/Onboarding'
 import useBuySellModalStore from '@/stores/buySellModalStore'
 import BitcoinInterest from '@/components/Main/BitcoinInterest'
 import { BitcoinChartSuspense } from '@/components/Main/BitcoinChart/BitcoinChartSuspense'
+import CoinsList, { CoinsListLoader } from '@/components/Main/CoinsList'
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
     context.queryClient.ensureQueryData(coingeckoBitcoinMarketChartQueryOptions())
     context.queryClient.ensureQueryData(coingeckoBitcoinMarketPriceQueryOptions())
+    context.queryClient.ensureQueryData(topCoinsQueryOptions())
   }
 })
 
@@ -120,6 +122,9 @@ function App() {
 
           <div className="space-y-4 xl:max-w-[368px]">
             <Onboarding />
+            <Suspense fallback={<CoinsListLoader />}>
+              <CoinsList />
+            </Suspense>
           </div>
         </div>
       </div>

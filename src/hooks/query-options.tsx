@@ -1,8 +1,9 @@
 import { queryOptions } from "@tanstack/react-query"
 import { getBitcoinMarketData, getBitcoinPrice } from "@/api/bitcoin"
-import { ACTIVITY_QUERY_KEY, BITCOIN_MARKET_CHART_QUERY_KEY, BITCOIN_MARKET_PRICE_QUERY_KEY, USER_QUERY_KEY } from "@/constants/query-key"
+import { ACTIVITY_QUERY_KEY, BITCOIN_MARKET_CHART_QUERY_KEY, BITCOIN_MARKET_PRICE_QUERY_KEY, TOP_COINS_QUERY_KEY, USER_QUERY_KEY } from "@/constants/query-key"
 import { getUser } from "@/api/user"
 import { getActivity } from "@/api/activity"
+import { getTopCoins } from "@/api/topCoins"
 
 export const userQueryOptions = () => (
     queryOptions({
@@ -34,6 +35,15 @@ export const coingeckoBitcoinMarketPriceQueryOptions = () => (
         queryKey: [BITCOIN_MARKET_PRICE_QUERY_KEY],
         queryFn: getBitcoinPrice,
         staleTime: 1000 * 60 * 1,
+    })
+)
+
+export const topCoinsQueryOptions = () => (
+    queryOptions({
+        queryKey: [TOP_COINS_QUERY_KEY],
+        queryFn: getTopCoins,
+        staleTime: 1000 * 60 * 10,
+        gcTime: 1000 * 60 * 10,
     })
 )
 
