@@ -5,25 +5,63 @@ import Container from '@/components/SharedContainer'
 import Button from '@/components/Buttons/Button'
 import { ChevronRight } from 'lucide-react'
 import BitcoinChart from '@/components/Main/BitcoinChart'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import Onboarding from '@/components/Main/Onboarding'
 import useBuySellModalStore from '@/stores/buySellModalStore'
 import BitcoinInterest from '@/components/Main/BitcoinInterest'
 import { BitcoinChartSuspense } from '@/components/Main/BitcoinChart/BitcoinChartSuspense'
 import CoinsList, { CoinsListLoader } from '@/components/Main/CoinsList'
+import useWatchCoinStore from '@/stores/watchCoinStore'
+import useWebSocketPriceStore from '@/stores/websocketPriceStore'
 
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context }) => {
-    context.queryClient.ensureQueryData(coingeckoBitcoinMarketChartQueryOptions())
-    context.queryClient.ensureQueryData(coingeckoBitcoinMarketPriceQueryOptions())
+    context.queryClient.ensureQueryData(coingeckoBitcoinMarketChartQueryOptions('bitcoin', 1))
+    context.queryClient.ensureQueryData(coingeckoBitcoinMarketPriceQueryOptions('bitcoin'))
     context.queryClient.ensureQueryData(topCoinsQueryOptions())
   }
 })
 
 function App() {
+  const watchCoin = useWatchCoinStore((state) => state.watchCoin);
+  const setWebSocketPrice = useWebSocketPriceStore((state) => state.setPrice);
   const setOpen = useBuySellModalStore((state) => state.setOpen);
   const setTab = useBuySellModalStore((state) => state.setTab);
+  const websocketRef = useRef<WebSocket | null>(null)
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    (async () => {
+      console.log("watchCoin:", watchCoin);
+      let latestPrice = 0;
+      websocketRef.current = new WebSocket(`wss://data-stream.binance.vision/ws/${watchCoin.symbol.toLowerCase()}usdt@trade`);
+      websocketRef.current.onopen = () => {
+        console.log('connected to binance websocket for coin ', watchCoin.symbol);
+      };
+      websocketRef.current.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        latestPrice = parseFloat(data.p);
+      };
+      websocketRef.current.onclose = (event) => {
+        console.log('disconnected from binance websocket for coin ', watchCoin.symbol, event);
+      };
+      websocketRef.current.onerror = (error) => {
+        console.error('error in binance websocket for coin ', watchCoin.symbol, error);
+      };
+      interval = setInterval(() => {
+        if (latestPrice > 0) {
+          setWebSocketPrice(latestPrice);
+        }
+      }, 3000);
+    })()
+
+    return () => {
+      websocketRef.current?.close();
+      if (interval) clearInterval(interval)
+      console.log("unmounted websocket closed for coin ", watchCoin.symbol);
+    };
+  }, [watchCoin]);
 
   return (
     <MainLayout>

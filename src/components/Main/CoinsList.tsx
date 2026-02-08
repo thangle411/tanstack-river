@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { topCoinsQueryOptions } from "@/hooks/query-options"
 import { useState } from "react";
+import useWatchCoinStore from "@/stores/watchCoinStore";
 
 export function CoinsListLoader() {
     return (
@@ -20,6 +21,7 @@ export function CoinsListLoader() {
 
 export default function CoinsList() {
     const { data } = useSuspenseQuery(topCoinsQueryOptions());
+    const setWatchCoin = useWatchCoinStore((state) => state.setWatchCoin);
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -52,7 +54,8 @@ export default function CoinsList() {
             <div className={`marquee-wrapper`}>
                 <div className={`marquee-container ${isHovered ? 'paused' : ''}`}>
                     {data.map((coin) => (
-                        <div key={coin.id} className="cursor-pointer bg-neutral-800 p-2 rounded hover:bg-neutral-700 transition-colors">
+                        <div key={coin.id} className="cursor-pointer bg-neutral-800 p-2 rounded hover:bg-neutral-700 transition-colors"
+                            onClick={() => setWatchCoin({ id: coin.id, symbol: coin.symbol })}>
                             <div className="flex flex-col items-center justify-between w-[60px]">
                                 <img src={coin.image} alt={coin.name} className="w-8 h-8" />
                                 <p className="text-[12px] text-neutral-500 mt-2">{coin.symbol.toUpperCase()}</p>
@@ -62,7 +65,8 @@ export default function CoinsList() {
                     ))}
                     {/* duplicated items for seamless looping */}
                     {data.map((coin) => (
-                        <div key={`${coin.id}-duplicate`} className="cursor-pointer bg-neutral-800 p-2 rounded hover:bg-neutral-700 transition-colors">
+                        <div key={`${coin.id}-duplicate`} className="cursor-pointer bg-neutral-800 p-2 rounded hover:bg-neutral-700 transition-colors"
+                            onClick={() => setWatchCoin({ id: coin.id, symbol: coin.symbol })}>
                             <div className="flex flex-col items-center justify-between w-[60px]">
                                 <img src={coin.image} alt={coin.name} className="w-8 h-8" />
                                 <p className="text-[12px] text-neutral-500 mt-2">{coin.symbol.toUpperCase()}</p>

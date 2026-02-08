@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Chart from "./Chart";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { coingeckoBitcoinMarketChartQueryOptions, coingeckoBitcoinMarketPriceQueryOptions } from "@/hooks/query-options";
 import Filters, { TFilter } from "./Filters";
 import PriceDisplay from "./PriceDisplay";
+import useWatchCoinStore from "@/stores/watchCoinStore";
 
 export default function BitcoinChart() {
+    const watchCoin = useWatchCoinStore((state) => state.watchCoin);
     const [filter, setFilter] = useState<TFilter>('1');
-    const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions(Number(filter)));
-    const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceQueryOptions());
+    const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions(watchCoin.id, Number(filter)));
+    const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceQueryOptions(watchCoin.id));
 
-    useEffect(() => {
-        console.log(filter);
-    }, [filter]);
+    console.log(watchCoin);
 
     const bitcoinData = chartData?.prices.map(([timestamp, price]: [number, number]) => ({
         timestamp: new Date(timestamp),

@@ -2,7 +2,8 @@ import { Odometer } from "@/components/Odometer";
 import { formatPrice } from "./utils";
 import useChartPriceStore from "@/stores/chartPriceStore";
 import useWebSocketPriceStore from "@/stores/websocketPriceStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import useWatchCoinStore from "@/stores/watchCoinStore";
 
 interface IPriceDisplay {
     data: { timestamp: Date; price: number }[];
@@ -10,6 +11,7 @@ interface IPriceDisplay {
 }
 
 export default function PriceDisplay({ data, priceData }: IPriceDisplay) {
+    const watchCoin = useWatchCoinStore((state) => state.watchCoin);
     const websocketPrice = useWebSocketPriceStore((state) => state.price);
     const isChartHovered = useChartPriceStore((state) => state.isChartHovered);
     const chartPrice = useChartPriceStore((state) => state.price);
@@ -18,6 +20,10 @@ export default function PriceDisplay({ data, priceData }: IPriceDisplay) {
         percent: (chartPrice - data[0].price) / chartPrice * 100,
         amount: chartPrice - data[0].price
     }
+
+    useEffect(() => {
+        setChartPrice(data[data.length - 1].price)
+    }, [watchCoin]);
 
     useEffect(() => {
         if (isChartHovered) return;
@@ -31,7 +37,7 @@ export default function PriceDisplay({ data, priceData }: IPriceDisplay) {
     return (
         <div className="pt-6 pl-6 mb-5">
             <div className="body-small text-neutral-300">
-                Bitcoin price
+                {watchCoin.id.split('-').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} price
             </div>
             <div className="my-1 body-large-plus tabular-nums flex text-neutral-50">
                 {isChartHovered ?

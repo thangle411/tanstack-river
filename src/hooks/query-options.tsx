@@ -22,19 +22,21 @@ export const activityQueryOptions = () => (
     })
 )
 
-export const coingeckoBitcoinMarketChartQueryOptions = (filter: number = 1) => (
+export const coingeckoBitcoinMarketChartQueryOptions = (id: string, filter: number = 1) => (
     queryOptions({
-        queryKey: [BITCOIN_MARKET_CHART_QUERY_KEY, filter],
-        queryFn: () => getBitcoinMarketData(filter),
-        staleTime: 1000 * 60 * 1,
+        queryKey: [BITCOIN_MARKET_CHART_QUERY_KEY, id, filter],
+        queryFn: () => getBitcoinMarketData(id, filter),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
     })
 )
 
-export const coingeckoBitcoinMarketPriceQueryOptions = () => (
+export const coingeckoBitcoinMarketPriceQueryOptions = (id: string) => (
     queryOptions({
-        queryKey: [BITCOIN_MARKET_PRICE_QUERY_KEY],
-        queryFn: getBitcoinPrice,
-        staleTime: 1000 * 60 * 1,
+        queryKey: [BITCOIN_MARKET_PRICE_QUERY_KEY, id],
+        queryFn: () => getBitcoinPrice(id),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
     })
 )
 
