@@ -16,9 +16,12 @@ export default function PriceDisplay({ data, priceData }: IPriceDisplay) {
     const isChartHovered = useChartPriceStore((state) => state.isChartHovered);
     const chartPrice = useChartPriceStore((state) => state.price);
     const setChartPrice = useChartPriceStore((state) => state.setPrice);
-    const change = {
+    const change = data[0] ? {
         percent: (chartPrice - data[0].price) / chartPrice * 100,
         amount: chartPrice - data[0].price
+    } : {
+        percent: 0,
+        amount: 0
     }
 
     useEffect(() => {

@@ -12,8 +12,6 @@ export default function BitcoinChart() {
     const { data: chartData } = useSuspenseQuery(coingeckoBitcoinMarketChartQueryOptions(watchCoin.id, Number(filter)));
     const { data: priceData } = useSuspenseQuery(coingeckoBitcoinMarketPriceQueryOptions(watchCoin.id));
 
-    console.log(watchCoin);
-
     const bitcoinData = chartData?.prices.map(([timestamp, price]: [number, number]) => ({
         timestamp: new Date(timestamp),
         price
